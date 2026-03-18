@@ -1,18 +1,15 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
-
 <template>
-  <div class="flex items-center justify-center h-screen">
-    <h1 class="text-4xl font-bold text-blue-500">
-      Tailwind is working 🚀
-    </h1>
-  </div>
+  <router-view />
 </template>
 
-<script setup>
-</script>
-
 <style>
+.products {
+  display: flex;
+  gap: 10px;
+}
+
+.card {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
 </style>
