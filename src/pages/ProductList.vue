@@ -1,38 +1,52 @@
+<script setup>
+const products = [
+  "public/images/bracelet.jpg",
+  "public/images/earing.jpg",
+  "public/images/ladies watch.jpg",
+  "public/images/watch .jpg"
+]
+</script>
+
 <template>
-  <div>
-    <h1>Product Explorer</h1>
+  <div class="page">
 
-    <input v-model="search" placeholder="Search products..." />
-
-    <div class="products">
-      <div v-for="product in filteredProducts" :key="product.id" class="card">
-        <h3>{{ product.name }}</h3>
-        <p>${{ product.price }}</p>
-        <button @click="selectProduct(product)">View</button>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <h2>MyStyle</h2>
+      <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">About Us</a>
+        <a href="#">Contact Us</a>
       </div>
-    </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">
+          Shine Every Day With Our <br />
+          Finest Collection.
+        </h1>
+        <button class="btn">Shop Now</button>
+      </div>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section class="products">
+      <div class="product-container">
+        <div class="card" v-for="(image, index) in products" :key="index">
+          <img :src="image" :alt="`product ${index + 1}`" />
+        </div>
+      </div>
+
+      <div class="text">
+        <h2>Our Featured Collection</h2>
+        <p>
+          Discover a curated selection of timeless jewelry and elegant watches
+          designed to elevate your everyday style.
+        </p>
+      </div>
+    </section>
+
   </div>
 </template>
-
-<script setup>
-import { useRouter } from 'vue-router'
-const router = useRouter()
-import { ref, computed } from 'vue'
-
-const search = ref('')
-const products = ref([
-  { id: 1, name: 'Phone', price: 500 },
-  { id: 2, name: 'Laptop', price: 1200 },
-  { id: 3, name: 'Headphones', price: 150 }
-])
-
-const filteredProducts = computed(() =>
-  products.value.filter(p =>
-    p.name.toLowerCase().includes(search.value.toLowerCase())
-  )
-)
-
-const selectProduct = (product) => {
-  alert(product.name)
-}
-</script>

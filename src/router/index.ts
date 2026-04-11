@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+
 import ProductList from '../pages/ProductList.vue'
 import ProductDetails from '../pages/ProductDetails.vue'
 
