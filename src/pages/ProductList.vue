@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import Navbar from '../components/Navbar.vue'
+// 🔹 1. Your CUSTOM PRODUCTS (IMPORTANT)
+    import {customProducts } from '../data/products'
+    
 
 const products = ref([])
 const allProducts = ref([])
@@ -8,75 +10,85 @@ const showAll = ref(false)
 const currentCategory = ref('all')
 
 onMounted(async () => {
-  const res = await fetch('https://dummyjson.com/products')
-  const data = await res.json()
+  try {
+    
 
-  // ✅ your custom products
-  const customProducts = [
-    { id: 101, title: "Gents Watch", price: 50, category: "watch", image: "/images/watch .jpg" },
-    { id: 102, title: "Flower Beaded Bracelet", price: 24, category: "bracelet", image: "/images/Flower-beaded-bracelet.jpg" },
-    { id: 103, title: "SilverGold Watch", price: 180, category: "watch", image: "/images/silver-gold-watch.jpg" },
-    { id: 104, title: "Rinestone stud", price: 25, category: "earring", image: "/images/purple-stud.jpg" },
-    { id: 105, title: "Purple stud", price: 28, category: "earring", image: "/images/Rinestone-stud.jpg" },
-    { id: 106, title: "Pink and White bracelet", price: 20, category: "bracelet", image: "/images/Pink-and-White-beaded-bracelet.jpg" }
-  ]
+    // 🔹 2. Get general products
+    const res = await fetch('https://dummyjson.com/products')
+    const data = await res.json()
 
-  // ✅ watches from API 
-  const watchProducts = data.products
-    .filter(p =>
+    // 🔹 3. Get watches separately
+    const res2 = await fetch('https://dummyjson.com/products/category/mens-watches')
+    const data2 = await res2.json()
+
+    const res3 = await fetch('https://dummyjson.com/products/category/womens-watches')
+    const data3 = await res3.json()
+
+    // 🔹 4. Combine API data
+    const apiProducts = [
+      ...data.products,
+      ...data2.products,
+      ...data3.products
+    ]
+    const filteredAPI = apiProducts.filter(p =>
       p.category === 'mens-watches' ||
-      p.category === 'womens-watches'
+      p.category === 'womens-watches' ||
+      p.category === 'beauty' ||
+      p.category === 'fragrances'
     )
-    .map(p => ({
+
+    // 🔹 5. Map API products to YOUR categories
+    const mappedAPI = filteredAPI.map(p => ({
       id: p.id,
       title: p.title,
       price: p.price,
-      category: "watch",   // 👈 important
-      image: p.thumbnail
+      image: p.thumbnail,
+      category:
+        p.category === 'mens-watches' || p.category === 'womens-watches'
+          ? 'watch'
+          : p.category === 'beauty' || p.category === 'fragrances' 
+          ? 'cosmatics'
+          : 'other'
     }))
 
-  // ✅ your existing API products
-  const apiProducts = data.products
-    .filter(p => p.category === 'beauty' || p.category === 'fragrances')
-    .map(p => ({
-      id: p.id,
-      title: p.title,
-      price: p.price,
-      category: "other",
-      image: p.thumbnail
-    }))
+    // 🔹 6. FINAL COMBINE (CUSTOM + API)
+    allProducts.value = [...customProducts, ...mappedAPI]
 
-  // ✅ combine everything (JUST ADD watches here)
-  allProducts.value = [...customProducts, ...apiProducts, ...watchProducts]
+    // 🔹 7. Show first 6
+    products.value = allProducts.value.slice(0, 6)
 
-  // show first 6
-  products.value = allProducts.value.slice(0, 6)
+  } catch (error) {
+    console.error("Error loading products:", error)
+  }
 })
 
-// See More
+
+// 🔹 FILTER FUNCTION
+const filterCategory = (cat) => {
+  currentCategory.value = cat
+  showAll.value = false
+
+  let filtered = []
+
+  if (cat === 'all') {
+    filtered = allProducts.value
+  } else {
+    filtered = allProducts.value.filter(p => p.category === cat)
+  }
+
+  products.value = filtered.slice(0, 6)
+}
+
+
+// 🔹 SEE MORE FUNCTION
 const showMore = () => {
   products.value = allProducts.value
   showAll.value = true
 }
-const filterCategory = (cat) => {
-  currentCategory.value = cat
-  showAll.value = false
-  let filtered = []
 
-  if (cat === 'all') {
-    filtered  = allProducts.value
-  } else {
-   filtered = allProducts.value.filter(p => p.category === cat)
-    products.value = filtered.slice(0, 6)
-  }
-}
 </script>
-
 <template>
   <div>
-
-    <!-- Navbar -->
-    <NavBar />
 
     <!-- Page -->
     <div class="page">
@@ -90,6 +102,7 @@ const filterCategory = (cat) => {
         <button @click="filterCategory('earring')">Earrings</button>
         <button @click="filterCategory('bracelet')">Bracelets</button>
         <button @click="filterCategory('watch')">Watches</button>
+        <button @click="filterCategory('cosmatics')">Cosmetics</button>
       </div>
 
       <!-- Product Grid -->
@@ -106,14 +119,12 @@ const filterCategory = (cat) => {
             View
           </button>
          
-
-
         </div>
 
       </div>
 
     </div>
-     <div class="see-more" v-if="!showAll">
+     <div class="see-more" v-if="!showAll && currentCategory === 'all'">
   <span @click="showMore">See More >></span>
 </div>
 
