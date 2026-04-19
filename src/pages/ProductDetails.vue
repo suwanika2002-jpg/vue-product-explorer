@@ -6,55 +6,16 @@ import {customProducts } from '../data/products'
 const route = useRoute()
 const product = ref(null)
 const isCustom = ref(false)
-const materials = [
-  {
-    name: "Leather Strap",
-    image: "/images/leather strap.jpeg",
-    colors: ["Black", "Brown", "Dark Blue"]
-  },
-  {
-    name: "Metal Strap",
-    image: "/images/metal strap.jpeg",
-    colors: ["Silver", "Gold", "Rose Gold"]
-  },
-  {
-    name: "Silicone Strap",
-    image: "/images/silicon strap.jpeg",
-    colors: ["Black", "White", "Blue", "Pink"]
-  },
-
-  {
-    name: "Beads",
-    types: [
-      {
-        type: "Crystal Beads",
-        image: "/images/crystal beads.jpeg",   // ✅ IMAGE 1
-        colors: ["Pink", "White"]
-      },
-      {
-        type: "Pearl Beads",
-        image: "/images/pearl bead.jpeg",     
-        colors: ["White", "Cream"]
-      },
-      {
-        type: "Glass Beads",
-        image: "/images/glass bead.jpeg.jpg",     
-        colors: ["Black", "Gray"]
-      },
-      {
-        type: "Plastic Beads",
-        image: "/images/plastic beads.jpeg",     
-        colors: ["Black", "Gray"]
-    }
-
-    ]
-  }
-]
-  
+const materials = ref([])
+const selectedType = ref(null)
+const showCustomize = ref(false)
 
 const selectedMaterial = ref(null)
-const selectedColor = ref('')
-const customColor = ref('')
+const selectColor = (c) => {
+  selectedColor.value = c
+  showColors.value = false
+}
+
 const selectMaterial = (m) => {
   if (selectedMaterial.value?.name === m.name) {
     selectedMaterial.value = null
@@ -63,33 +24,98 @@ const selectMaterial = (m) => {
   }
 }
 
+const toggleCustomize = () => {
+  showCustomize.value = !showCustomize.value
+  if (!showCustomize.value) {
+    selectedType.value = null
+  }
+}
+const selectType = (t) => {
+  if (selectedType.value?.type === t.type) {
+    selectedType.value = null
+  } else {
+    selectedType.value = t
+  }
+        
+}
+
+const showColors = ref(false)
+
+const braceletColors = ["Pink", "Blue", "Purple", "White", "Black", "Gold"]
 onMounted(async () => {
   const id = parseInt(route.params.id)
 
-const found = customProducts.find(p => p.id === id)
+  const found = customProducts.find(p => p.id === id)
 
-if (found) {
-  product.value = found
-  isCustom.value = true   // ✅ mark as custom
-} else {
-  const res = await fetch(`https://dummyjson.com/products/${id}`)
-  const data = await res.json()
+  if (found) {
+    product.value = found
+    isCustom.value = true
+  } else {
+    const res = await fetch(`https://dummyjson.com/products/${id}`)
+    const data = await res.json()
 
-  product.value = {
-    id: data.id,
-    title: data.title,
-    price: data.price,
-    description: data.description,
-    image: data.thumbnail,
-    category:
-      data.category === 'mens-watches' || data.category === 'womens-watches'
-        ? 'watch'
-        : data.category === 'beauty' || data.category === 'fragrances'
-        ? 'cosmetic'
-        : 'other'
+    product.value = {
+      id: data.id,
+      title: data.title,
+      price: data.price,
+      description: data.description,
+      image: data.thumbnail,
+      category:
+        data.category === 'mens-watches' || data.category === 'womens-watches'
+          ? 'watch'
+          : 'other'
+    }
   }
-}
+
+  // 🔥 SET MATERIALS BASED ON CATEGORY
+
+  if (product.value.category === 'watch') {
+    materials.value = [
+     {
+     name: "Leather Strap",
+     image: "/images/leather strap.jpeg",
+     colors: ["Black", "Brown", "Dark Blue"]
+  },
+  {
+    name: "Metal Strap",
+    image: "/images/metal strap.jpeg",
+    colors: ["Silver", "Gold", "Rose Gold"]
+  },
+   {
+     name: "Silicone Strap",
+     image: "/images/silicon strap.jpeg",
+     colors: ["Black", "White", "Blue", "Pink"]
+   },
+  ]
+  }
+
+  if (product.value.category === 'bracelet') {
+    materials.value = [
+      {
+        name: "Beads",
+        types: [
+          {
+            type: "Glass",
+            image: "/images/glass bead.jpeg"
+          },
+          {
+            type: "Pearl",
+            image: "/images/pearl bead.jpeg"
+          },
+           {
+            type: "Crystal",
+            image: "/images/crystal beads.jpeg"
+          },
+          {
+            type: "Plastic",
+            image: "/images/plastic beads.jpeg"
+          }
+        ]
+        }]}
+
+
 })
+
 </script>
 
 <template>
@@ -97,12 +123,12 @@ if (found) {
 
     <div class="container">
 
-      <!-- LEFT IMAGE -->
+      <!-- LEFT SIDE -->
       <div class="left">
         <img :src="product.image" />
       </div>
 
-      <!-- RIGHT DETAILS -->
+      <!-- RIGHT SIDE -->
       <div class="right">
 
         <h1 class="title">{{ product.title }}</h1>
@@ -113,91 +139,110 @@ if (found) {
 
         <p class="price">$ {{ product.price }}</p>
 
-        <!-- CUSTOM PRODUCTS -->
-<div v-if="isCustom && product.category === 'bracelet'" class="options">
+        <!-- ✅ ONLY CUSTOMIZE BUTTON -->
+       <div class="action-buttons">
 
+  <!-- Available Colours (Dropdown Button) -->
+  <div class="dropdown">
 
-  <div v-if="selectedMaterial?.name === 'Beads'" class="related">
-
-  <h2>Bead Types</h2>
-
-  <div class="related-grid">
-
-    <div 
-      v-for="t in selectedMaterial.types"
-      :key="t.type"
-      class="related-card"
-      @click="selectedType = t"
+    <button 
+      class="{active: showColors}"
+      @click="showColors = !showColors; showCustomize = false"
     >
-      <img :src="t.image" />
+      {{ selectedColor || 'Available Colours' }}
+    </button>
 
-      <div class="overlay">
-        <p>{{ t.type }}</p>
+    <!-- Dropdown list -->
+    <div v-if="showColors" class="dropdown-menu">
+      <div 
+        v-for="c in braceletColors" 
+        :key="c"
+        class="dropdown-item"
+        @click="selectColor(c)"
+      >
+        {{ c }}
       </div>
     </div>
 
   </div>
-<<div v-if="selectedMaterial?.name === 'Beads'" class="color-request">
 
-  <p>Request a Colour (Optional)</p>
-
-  <input 
-    type="text" 
-    v-model="customColor"
-    placeholder="Enter preferred colour (e.g. Light Pink, Sky Blue)"
-  />
-
-</div>
-</div>
-  
-
-</div>
-
-
-<!-- WATCHES -->
-<div v-else-if="product.category === 'watch'" class="options">
-
-  
-<!-- MATERIAL -->
-<p>Material</p>
-
-<div class="material-images">
-  <div 
-    v-for="m in materials" 
-    :key="m.name"
-    class="material-card"
-    :class="{ active: selectedMaterial && selectedMaterial.name === m.name }"
-    @click="selectMaterial(m)"
+  <!-- Customize -->
+  <button
+    :class="{ active: showCustomize }"
+    @click="showCustomize = !showCustomize; showColors = false"
   >
-    <img :src="m.image" />
-    <p>{{ m.name }}</p>
-  </div>
-</div>
-<!-- COLOURS -->
-<div v-if="selectedMaterial">
-
-  <p>Available Colours</p>
-
-  <div class="color-options">
-    <span 
-      v-for="c in selectedMaterial.colors"
-      :key="c"
-      class="color-box"
-      :class="{ active: selectedColor === c }"
-      @click="selectedColor = c"
-    >
-      {{ c }}
-    </span>
-  </div>
+    Customize
+  </button>
 
 </div>
+        <!-- ✅ BRACELET: BEAD TYPES -->
+        <div 
+          v-if="showCustomize && product.category === 'bracelet'" 
+          class="related"
+        >
+          <h2>Bead Types</h2>
 
-</div>
+          <div class="related-grid">
+            <div 
+              v-for="t in materials?.[0]?.types || []"
+              :key="t.type"
+              class="bead-card"
+              :class="{ active: selectedType?.type === t.type }"
+              @click="selectType(t)"
+            >
+              <img :src="t.image" />
+              <div class="overlay">
+                <p>{{ t.type }} Beads</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ✅ WATCHES: SHOW ONLY WHEN CUSTOMIZE CLICKED -->
+        <div 
+          v-if="showCustomize && product.category === 'watch'" 
+          class="options"
+        >
+
+          <!-- MATERIAL -->
+          <p>Material</p>
+
+          <div class="material-images">
+            <div 
+              v-for="m in materials" 
+              :key="m.name"
+              class="material-card"
+              :class="{ active: selectedMaterial?.name === m.name }"
+              @click="selectMaterial(m)"
+            >
+              <img :src="m.image" />
+              <p>{{ m.name }}</p>
+            </div>
+          </div>
+
+          <!-- COLOURS -->
+          <div v-if="selectedMaterial">
+            <p>Available Colours</p>
+
+            <div class="color-options">
+              <span 
+                v-for="c in selectedMaterial.colors"
+                :key="c"
+                class="color-box"
+                :class="{ active: selectedColor === c }"
+                @click="selectedColor === c ? selectedColor = '' : selectedColor = c"
+              >
+                {{ c }}
+              </span>
+            </div>
+          </div>
+
+        </div>
 
         <!-- ADD TO CART -->
         <button class="cart-btn">Add to Cart</button>
 
-        <!-- extra small text -->
+        <!-- extra -->
         <div class="extra">
           <span>✔ Customizable Design</span>
           <span>✔ Premium Materials</span>
@@ -221,18 +266,20 @@ if (found) {
 .container {
   display: flex;
   gap: 60px;
-  align-items: center;
+  align-items: flex-start;
 }
 
 /* LEFT */
 .left img {
-  width: 450px;
+  width: 500px;
   border-radius: 10px;
 }
 
 /* RIGHT */
 .right {
-  max-width: 400px;
+  width: 400px;
+  align-self: flex-start
+  
 }
 
 /* title */
@@ -280,6 +327,7 @@ if (found) {
   border-radius: 25px;
   font-size: 14px;
   cursor: pointer;
+  margin-top: 20px;
 }
 
 .cart-btn:hover {
@@ -336,8 +384,8 @@ if (found) {
   background: #8b5d5d;
   color: white;
 }
-related {
-  margin-top: 60px;
+.related {
+  margin-top: 20px 0;
 }
 
 .related h2 {
@@ -347,7 +395,7 @@ related {
 .related-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  gap: 10px;
 }
 
 .related-card {
@@ -363,26 +411,131 @@ related {
   object-fit: cover;
 }
 
-.overlay {
-  width: 60%;
+.bead-card .overlay {
+  width:50%;
+  position: absolute;
+  inset: 0;
   background: #6d2f2f;
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
+  font-size: 14px;
+  font-weight: 600;
 }
 
-.overlay p {
+.bead-card .overlay p {
   font-weight: bold;
 }
-.color-request {
-  margin-top: 20px;
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0;
 }
 
-.color-request input {
+.action-buttons button {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid #6d2f2f;
+  background: white;
+  color: #6d2f2f;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.action-buttons button.active {
+  background: #6d2f2f;
+  color: white;
+}
+.bead-card img {
   width: 100%;
-  padding: 10px;
+  height: 100%;
+  object-fit: cover;
+}
+.bead-card{
+  position: relative;
+  border-radius: 12px ;
+  overflow: hidden;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.bead-card .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(80,30,30,0.7);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.bead-card:hover {
+  transform: scale(1.03)
+}
+
+.bead-card.active {
+ outline: 2px solid #6d2f2f;
+ transform: scale(1.03);
+}
+.bead-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.bead-card{
+  height: 90px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+.color-select {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 200px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.color-select:focus {
+  outline: none;
+  border-color: #6d2f2f;
+}
+.dropdown {
+  position: relative;
+}
+
+.dropdown-btn {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid #6d2f2f;
+  background: #6d2f2f;
+  color: white;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background: white;
   border: 1px solid #ccc;
   border-radius: 8px;
+  width: 180px;
+  z-index: 10;
+}
+
+.dropdown-item {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background: #f3f3f3;
 }
 </style>
