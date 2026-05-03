@@ -1,9 +1,11 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import {customProducts } from '../data/products'
+import{ addToCart } from '../store/cart' 
 
 const route = useRoute()
+const router = useRouter()
 const product = ref(null)
 const isCustom = ref(false)
 const materials = ref([])
@@ -115,7 +117,24 @@ onMounted(async () => {
 
 
 })
+//add to cart function
+const handleAddToCart = () => {
+  const item = {
+    id: product.value.id,
+    title: product.value.title,
+    price: product.value.price,
+    image: product.value.image,
 
+    // options
+    color: selectedColor.value,
+    material: selectedMaterial.value?.name || null,
+    beadType: selectedType.value?.type || null
+  }
+
+  addToCart(item)
+
+ router.push('/cart')
+}
 </script>
 
 <template>
@@ -142,11 +161,14 @@ onMounted(async () => {
         <!-- ✅ ONLY CUSTOMIZE BUTTON -->
        <div class="action-buttons">
 
-  <!-- Available Colours (Dropdown Button) -->
+  <!-- Available Colours (ONLY for watch, bracelet, earring) -->
+<div v-if="['bracelet','earring'].includes(product.category)">
+
   <div class="dropdown">
 
-    <button 
-      class="{active: showColors}"
+    <button
+      class="dropdown-btn"
+      :class="{ active: showColors }"
       @click="showColors = !showColors; showCustomize = false"
     >
       {{ selectedColor || 'Available Colours' }}
@@ -154,8 +176,8 @@ onMounted(async () => {
 
     <!-- Dropdown list -->
     <div v-if="showColors" class="dropdown-menu">
-      <div 
-        v-for="c in braceletColors" 
+      <div
+        v-for="c in braceletColors"
         :key="c"
         class="dropdown-item"
         @click="selectColor(c)"
@@ -166,8 +188,11 @@ onMounted(async () => {
 
   </div>
 
+</div>
+
   <!-- Customize -->
   <button
+  v-if= "['watch','bracelet'].includes(product.category)"
     :class="{ active: showCustomize }"
     @click="showCustomize = !showCustomize; showColors = false"
   >
@@ -240,8 +265,9 @@ onMounted(async () => {
         </div>
 
         <!-- ADD TO CART -->
-        <button class="cart-btn">Add to Cart</button>
-
+       <button class="cart-btn" @click="handleAddToCart">
+  Add to Cart
+</button>
         <!-- extra -->
         <div class="extra">
           <span>✔ Customizable Design</span>

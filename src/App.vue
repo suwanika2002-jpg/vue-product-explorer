@@ -1,24 +1,24 @@
-
+<script setup>
+import { ref }  from 'vue'
+const showLogin = ref(false)
+</script>
 <template>
  <div>
   <!-- navbar -->
   <div class="nav-links">
-    <nav class="navbar">
+   <button @click="showLogin = true">Login</button>
   <h2 class="logo">MyStyle</h2>
 
-  <div class="nav-links">
-    <a href="#">Home</a>
-    <a href="#">About Us</a>
-    <a href="#">Contact Us</a>
-    <a href="#">Login </a>
+  
 
     <span class="cart-icon">🛒</span>
   </div>
-</nav>
-  </div>
+
+ 
   <!-- page content -->
   <router-view />
-
+<Login v-if="showLogin"
+@close="showLogin = false" />
   <!-- footer -->
   <footer class="footer">
 
