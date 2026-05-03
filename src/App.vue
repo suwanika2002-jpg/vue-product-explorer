@@ -1,25 +1,20 @@
 <script setup>
-import { ref }  from 'vue'
+import { ref } from 'vue'
+import Login from './pages/Login.vue' // ✅ import
+import Navbar from './components/Navbar.vue'
+
 const showLogin = ref(false)
 </script>
+
 <template>
- <div>
-  <!-- navbar -->
-  <div class="nav-links">
-   <button @click="showLogin = true">Login</button>
-  <h2 class="logo">MyStyle</h2>
-
   
+      <Navbar @openLogin="showLogin = true" />
 
-    <span class="cart-icon">🛒</span>
-  </div>
+      <router-view @openLogin="showLogin = true" />
 
+      <Login v-if ="showLogin" @close="showLogin = false" />
  
-  <!-- page content -->
-  <router-view />
-<Login v-if="showLogin"
-@close="showLogin = false" />
-  <!-- footer -->
+ 
   <footer class="footer">
 
 
@@ -39,10 +34,10 @@ const showLogin = ref(false)
       <div class="footer-bottom">
         <p>© 2026 MyStyle. All rights reserved.</p>
       </div>
-
+  
     </footer>
 
-  </div>
+
 </template>
 
 <style>

@@ -17,8 +17,7 @@
           sophistication for every occasion.
         
         </p>
-        <button class="btn" @click="$emit('openLogin')">Shop Now</button>>
-         
+        <button class="btn"  @click="emit('openLogin')">Shop Now</button>
       </div>
     </section>
 
@@ -64,9 +63,7 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-const goLogin = () => {
-  router.push('/login')
-}
+const emit = defineEmits(['openLogin'])
 </script>
 
 

@@ -32,11 +32,14 @@ body {
 
 /* NAV LINKS */
 .nav-links {
+  cursor:pointer;
+  user-select:none;
   display: flex;
   gap: 30px;   /* equal spacing */
 }
 
 .nav-links a {
+  cursor: pointer;
   text-decoration: none;   /* remove underline */
   color: #333;             /* keep same color */
   font-size: 16px;

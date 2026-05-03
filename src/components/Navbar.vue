@@ -2,10 +2,11 @@
   <nav class="navbar">
     <h2 class="logo">MyStyle</h2>
 
-    
-
     <div class="nav-right">
-      <router-link to="/login" class="login-link">Login</router-link>
+      <span class="nav-link" @click="$emit('openLogin')">Home</span>
+      <span class="nav-link">Contact Us</span>
+      <span class="nav-link">About Us</span>
+      <span class="nav-link" @click="$emit('openLogin')">Login</span>
 
       <span class="cart-icon" @click="goCart">🛒</span>
     </div>
@@ -24,25 +25,17 @@ const goCart = () => {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Sail&display=swap');
-.container {
-  width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
+
+/* NAVBAR */
 .navbar {
   width: 100%;
   height: 80px;
-  padding: 10px 0;
+  padding: 10px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #EDDADA;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
   position: relative;
- 
-
 }
 
 /* LOGO */
@@ -53,26 +46,6 @@ const goCart = () => {
   color: #100101;
 }
 
-/* NAV LINKS */
-.nav-links {
-  display: flex;
-  gap: 30px;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: #333;
-  font-size: 16px;
-  padding: 6px 12px;
-  border-radius: 6px;
-  transition: background-color 0.3s;
-}
-
-.nav-links a:hover,
-.nav-links a.router-link-active {
-  background-color: rgba(0, 0, 0, 0.08);
-}
-
 /* RIGHT SIDE */
 .nav-right {
   display: flex;
@@ -80,8 +53,10 @@ const goCart = () => {
   gap: 20px;
 }
 
-.login-link {
-  text-decoration: none;
+/* NAV LINKS (FIXED PART) */
+.nav-link {
+  cursor: pointer;
+  user-select: none;
   color: #333;
   font-size: 16px;
   padding: 6px 12px;
@@ -89,7 +64,7 @@ const goCart = () => {
   transition: background-color 0.3s;
 }
 
-.login-link:hover {
+.nav-link:hover {
   background-color: rgba(0, 0, 0, 0.08);
 }
 
