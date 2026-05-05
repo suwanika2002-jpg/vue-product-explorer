@@ -87,23 +87,48 @@ const showMore = () => {
 }
 
 </script>
-<template>
-  <div>
+<template
 
-    <!-- Page -->
-    <div class="page">
+ <div class="product-page">
+  <div class="search-section">
+  <div class="search-bar">
+    <input type="text" placeholder="Search by keyword or item" />
+    <button>Search</button>
+  </div>
+</div>
 
-      <!-- Title -->
-      <h1 class="main-title">Petals & Precision</h1>
-
-      <!-- Filters -->
-      <div class="filters">
-        <button @click="filterCategory('all')">All</button>
-        <button @click="filterCategory('earring')">Earrings</button>
-        <button @click="filterCategory('bracelet')">Bracelets</button>
-        <button @click="filterCategory('watch')">Watches</button>
-        <button @click="filterCategory('cosmatics')">Cosmetics</button>
+    <!-- HERO SECTION -->
+    <div class="hero-card">
+      <div class="hero-content">
+        <h2>Petals &<br />Precision</h2>
+        <button class="explore-btn">Explore</button>
       </div>
+    </div>
+    <div class="category-section">
+  <div class="category-item" @click="filterCategory('bracelet')">
+    <img src="/images/Blossom-glow-bracelet.jpg" alt="Bracelets" />
+    <span class="tag">Bracelets</span>
+  </div>
+
+  <div class="category-item" @click="filterCategory('earring')">
+    <img src="/images/Rinestone-stud.jpg" alt="Earrings" />
+    <span class="tag">Earrings</span>
+  </div>
+
+  <div class="category-item" @click="filterCategory('watch')">
+    <img src="/images/watch .jpg" alt="Watches" />
+    <span class="tag">Watches</span>
+  </div>
+
+  <div class="category-item" @click="filterCategory('cosmatics')">
+    <img src="/images/cosmatics.jpg" alt="Cosmatics" />
+    <span class="tag">Cosmatics</span>
+  </div>
+</div>
+
+    <!-- COLLECTION TITLE -->
+    <h3 class="section-title">The Bloom Collection</h3>
+   
 
       <!-- Product Grid -->
       <div class="grid">
@@ -123,46 +148,102 @@ const showMore = () => {
 
       </div>
 
-    </div>
+   
      <div class="see-more" v-if="!showAll && currentCategory === 'all'">
   <span @click="showMore">See More >></span>
 </div>
 
-  </div>
+  
 </template>
 
 <style scoped>
-.page {
-  background: #fdf6f6;
-  padding: 60px 80px;
+/* PAGE */
+
+/* PAGE */
+.product-page {
+  padding: 20px 40px;
 }
 
-/* Title */
-.main-title {
-  font-size: 42px;
+/* HERO */
+.hero-card {
+  max-width:1200px;
+  margin-top:20px;
+  width: 80%;
+  height: 380px;
+  border-radius: 25px;
+  overflow: hidden;
+
+  background-image: url('/images/priouct detail page.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-position:center;
+  display: flex;
+  align-items: center;
+  padding-left: 60px;
+
+  margin: 0 auto 40px;
+}
+
+/* TEXT */
+.hero-content {
+  background: rgba(255, 255, 255, 0.4); /* light box like figma */
+  padding: 80px 75px;
+  
+}
+
+.hero-content h2 {
+  font-size: 28px;
   font-weight: 700;
-  margin-bottom: 30px;
-  text-align: left;
+  color: #570013;
+  margin-bottom: 10px;
+  line-height: 1.6;
 }
 
-/* Filters */
-.filters {
-  margin-bottom: 30px;
-}
-
-.filters button {
-  margin-right: 10px;
-  padding: 6px 12px;
+/* BUTTON */
+.explore-btn {
+  background: #570013;
+  color: white;
   border: none;
-  background: #ddd;
-  border-radius: 6px;
+  padding: 8px 18px;
+  border-radius: 20px;
   cursor: pointer;
+  font-size: 14px;
 }
 
-.filters button:hover {
-  background: #bbb;
+.explore-btn:hover {
+  background: #5a2f2f;
 }
 
+/* TITLE */
+.section-title {
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  padding-top: 50px;
+  text-align: left;
+  padding-left: 50px;
+}
+
+/* PRODUCTS */
+.products {
+  display: flex;
+  gap: 25px;
+}
+
+/* CARD */
+.product-card {
+  flex: 1;
+  border-radius: 15px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.product-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
 /* Grid */
 .grid {
   display: grid;
@@ -228,5 +309,111 @@ const showMore = () => {
 
 .see-more span:hover {
   text-decoration: underline;
+}
+/* SPACE BELOW NAVBAR */
+.search-section {
+  display: flex;
+  justify-content: right;
+  margin-top: 20px;   /* 👈 GAP from navbar */
+  margin-bottom: 20px; /* 👈 GAP before hero */
+}
+
+/* SEARCH BAR CONTAINER */
+.search-bar {
+  width: 300px;
+  display: flex;
+  border-radius: 30px;
+  overflow: hidden;
+  background: #eee;
+  align-items: right;
+}
+
+/* INPUT */
+.search-bar input {
+  flex: 1;
+  padding: 12px 20px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  background: transparent;
+}
+
+/* BUTTON */
+.search-bar button {
+  padding: 12px 25px;
+  border: none;
+  background: #5a2a2a;
+  color: white;
+  cursor: pointer;
+  border-radius: 0 30px 30px 0;
+}
+.category-section {
+  display: flex;
+  justify-content: center;
+  gap: 70px;
+  margin: 30px 0;
+}
+
+.category-item {
+  text-align: center;
+  cursor: pointer;
+}
+
+.category-item img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+/* Hover effect */
+.category-item img:hover {
+  transform: scale(1.05);
+}
+
+.category-item p {
+  margin-top: 10px;
+  font-weight: 500;
+  color: #333;
+}
+
+.category-item {
+  position: relative;
+  text-align: center;
+  cursor: pointer;
+}
+
+/* Circle image */
+.circle-img {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+}
+
+.circle-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* 🔥 TAG STYLE (LIKE YOUR IMAGE) */
+.tag {
+  position: absolute;
+  bottom: -15px;
+  left: 75%;
+  transform: translateX(-50%);
+
+  background: #e6e6e6;
+  padding: 6px 18px;
+  border-radius: 20px 0 20px 0;
+
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
+display:inline-block;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
 }
 </style>
