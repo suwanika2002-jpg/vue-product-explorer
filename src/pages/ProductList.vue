@@ -2,7 +2,8 @@
 import { ref, onMounted } from 'vue'
 // 🔹 1. Your CUSTOM PRODUCTS (IMPORTANT)
     import {customProducts } from '../data/products'
-    
+import { useRouter } from 'vue-router'
+    const router = useRouter()
 
 const products = ref([])
 const allProducts = ref([])
@@ -86,8 +87,13 @@ const showMore = () => {
   showAll.value = true
 }
 
+const goToDetails = (id) => {
+  // Navigate to details page with product ID
+  router.push(`/product/${id}`)
+}
+
 </script>
-<template
+<template>
 
  <div class="product-page">
   <div class="search-section">
@@ -131,28 +137,33 @@ const showMore = () => {
    
 
       <!-- Product Grid -->
-      <div class="grid">
+       <div class ="products-container">
+      <div class="products-grid">
+  <div class="product-card" v-for="product in products" :key="product.id">
 
-        <div class="card" v-for="p in products" :key="p.id">
+    <!-- IMAGE -->
+    <div class="product-img">
+      <img :src="product.image" alt="">
+    </div>
 
-          <img :src="p.image" />
-
-          <h3>{{ p.title }}</h3>
-          <p>$. {{ p.price }}</p>
-
-          <button @click="$router.push(`/product/${p.id}`)">
-            View
-          </button>
-         
-        </div>
-
+    <!-- BOTTOM CARD -->
+    <div class="product-info">
+      <div class="product-row">
+        <span class="title">{{ product.title }}</span>
+        <span class="price">$ {{ product.price }}</span>
       </div>
 
+      <button class="view-btn" @click="goToDetails(product.id)">View</button>
+    </div>
+
+  </div>
+</div>
+       </div>
    
      <div class="see-more" v-if="!showAll && currentCategory === 'all'">
   <span @click="showMore">See More >></span>
 </div>
-
+ </div>
   
 </template>
 
@@ -219,82 +230,119 @@ const showMore = () => {
 .section-title {
   font-size: 30px;
   font-weight: 600;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   padding-top: 50px;
   text-align: left;
   padding-left: 50px;
+  margin-left: 40px;
 }
 
 /* PRODUCTS */
 .products {
   display: flex;
-  gap: 25px;
+  gap: 20px;
 }
-
+.products-container {
+  background: #f5f0f0;   /* light soft color */
+  padding: 40px 30px;
+  border-radius: 30px;
+  max-width: 1100px;
+  margin: 0 auto;        /* center it */
+}
 /* CARD */
 .product-card {
   flex: 1;
-  border-radius: 15px;
+ 
   overflow: hidden;
   background: #fff;
 }
 
 .product-card img {
   width: 100%;
-  height: 180px;
+  height: 200px;
   object-fit: cover;
 }
 /* Grid */
-.grid {
+/* GRID */
+.products-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  padding: 40px;
+  justify-items: center;
 }
 
-/* Card */
-.card {
-  background: #f4eaea;
-  padding: 15px;
-  border-radius: 12px;
+/* CARD */
+.product-card {
+  width: 200px;
+  overflow: hidden;
+  border-radius: 30px;
+  background: transparent;
   transition: 0.3s;
+  border: 20px solid #ddd;
 }
 
-.card:hover {
-  transform: translateY(-8px);
+.product-card:hover {
+  transform: translateY(-6px);
 }
 
-/* Image */
-.card img {
+/* IMAGE */
+.product-img {
   width: 100%;
-  height: 260px;
+  height: 160px;
+ 
+  overflow: hidden;
+}
+
+.product-img img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 10px;
 }
 
-/* Text */
-.card h3 {
-  margin-top: 15px;
-  font-size: 18px;
+/* BOTTOM SECTION */
+.product-info {
+  background: #f3dede;  /* soft pink like figma */
+  padding: 12px;
+ 
+
 }
 
-.card p {
-  margin-top: 5px;
-  color: #444;
+/* TEXT ROW */
+.product-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 10px;
 }
 
-/* Button */
-.card button {
-  margin-top: 10px;
-  padding: 6px 14px;
-  background: #5a2d2d;
+.title {
+  font-weight: 600;
+  text-align: left;
+}
+
+.price {
+  font-weight: 500;
+  text-align:right;
+  white-space: nowrap;
+}
+
+/* BUTTON */
+.view-btn {
+  background: #3b0d0d;
   color: white;
   border: none;
-  border-radius: 6px;
+  padding: 6px 22px;
+  border-radius: 20px;
   cursor: pointer;
+  font-size: 12px;
+  display: block;
+  margin: 0 auto;
+  
 }
 
-.card button:hover {
-  background: #7a3d3d;
+.view-btn:hover {
+  background: #5a1a1a;
 }
 .see-more {
   margin-top: 20px;

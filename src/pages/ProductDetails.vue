@@ -11,7 +11,7 @@ const isCustom = ref(false)
 const materials = ref([])
 const selectedType = ref(null)
 const showCustomize = ref(false)
-
+const selectedColor = ref('')
 const selectedMaterial = ref(null)
 const selectColor = (c) => {
   selectedColor.value = c
@@ -98,19 +98,24 @@ onMounted(async () => {
         types: [
           {
             type: "Glass",
-            image: "/images/glass bead.jpeg"
+            image: "/images/glass bead.jpeg",
+            price: 5
           },
           {
             type: "Pearl",
-            image: "/images/pearl bead.jpeg"
+            image: "/images/pearl bead.jpeg",
+            price: 30
+
           },
            {
             type: "Crystal",
-            image: "/images/crystal beads.jpeg"
+            image: "/images/crystal beads.jpeg",
+            price: 10
           },
           {
             type: "Plastic",
-            image: "/images/plastic beads.jpeg"
+            image: "/images/plastic beads.jpeg",
+            price: 1.5
           }
         ]
         }]}
@@ -200,29 +205,34 @@ const handleAddToCart = () => {
   </button>
 
 </div>
-        <!-- ✅ BRACELET: BEAD TYPES -->
-        <div 
-          v-if="showCustomize && product.category === 'bracelet'" 
-          class="related"
-        >
-          <h2>Bead Types</h2>
+       <!-- ✅ BRACELET: BEAD TYPES -->
+<div 
+  v-if="showCustomize && product.category === 'bracelet'" 
+  class="related"
+>
+  <h2>Bead Types</h2>
 
-          <div class="related-grid">
-            <div 
-              v-for="t in materials?.[0]?.types || []"
-              :key="t.type"
-              class="bead-card"
-              :class="{ active: selectedType?.type === t.type }"
-              @click="selectType(t)"
-            >
-              <img :src="t.image" />
-              <div class="overlay">
-                <p>{{ t.type }} Beads</p>
-              </div>
-            </div>
-          </div>
-        </div>
+  <div class="related-grid">
+    <div 
+      v-for="t in materials?.[0]?.types || []"
+      :key="t.type"
+      class="bead-card"
+      :class="{ active: selectedType?.type === t.type }"
+      @click="selectType(t)"
+    >
+      <img :src="t.image" />
 
+      <div class="overlay">
+        <p>{{ t.type }} Beads</p>
+
+        <!-- ✅ PRICE -->
+        <span class="bead-price">
+          ${{ t.price }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
         <!-- ✅ WATCHES: SHOW ONLY WHEN CUSTOMIZE CLICKED -->
         <div 
           v-if="showCustomize && product.category === 'watch'" 
@@ -304,7 +314,8 @@ const handleAddToCart = () => {
 /* RIGHT */
 .right {
   width: 400px;
-  align-self: flex-start
+  align-self: flex-start;
+  
   
 }
 
@@ -411,7 +422,7 @@ const handleAddToCart = () => {
   color: white;
 }
 .related {
-  margin-top: 20px 0;
+  margin: 20px 0;
 }
 
 .related h2 {
@@ -475,24 +486,27 @@ const handleAddToCart = () => {
   background: #6d2f2f;
   color: white;
 }
+.bead-card {
+  height: 90px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  transition: 0.3s;
+}
 .bead-card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.bead-card{
-  position: relative;
-  border-radius: 12px ;
-  overflow: hidden;
-  cursor: pointer;
-  transition: 0.3s;
-}
+
 .bead-card .overlay {
   position: absolute;
   inset: 0;
   background: rgba(80,30,30,0.7);
   color: white;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   font-weight: 600;
@@ -511,13 +525,12 @@ const handleAddToCart = () => {
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
 }
-.bead-card{
-  height: 90px;
-  border-radius: 10px;
-  overflow: hidden;
-  position: relative;
-  cursor: pointer;
+.bead-price{
+  display: block;
+  font-size: 13px;
+  margin-top: 4px;
 }
+
 .color-select {
   margin-top: 8px;
   padding: 8px 12px;
