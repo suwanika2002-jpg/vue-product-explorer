@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {customProducts } from '../data/products'
 import{ addToCart } from '../store/cart' 
-
+import { computed } from 'vue'
 const route = useRoute()
 const router = useRouter()
 const product = ref(null)
@@ -127,9 +127,9 @@ const handleAddToCart = () => {
   const item = {
     id: product.value.id,
     title: product.value.title,
-    price: product.value.price,
+    price: finalPrice.value,
     image: product.value.image,
-
+    description: product.value.description,
     // options
     color: selectedColor.value,
     material: selectedMaterial.value?.name || null,
@@ -140,6 +140,18 @@ const handleAddToCart = () => {
 
  router.push('/cart')
 }
+const finalPrice = computed(() => {
+
+  if (
+    showCustomize.value &&
+    selectedType.value &&
+    selectedType.value.price
+  ) {
+    return Number(selectedType.value.price)
+  }
+
+  return Number(product.value.price)
+})
 </script>
 
 <template>
@@ -194,7 +206,24 @@ const handleAddToCart = () => {
   </div>
 
 </div>
+<div v-if="showCustomize" class="selected-options">
 
+  <p v-if="selectedColor">
+    <strong>Selected Colour:</strong>
+    {{ selectedColor }}
+  </p>
+
+  <p v-if="selectedMaterial">
+    <strong>Selected Material:</strong>
+    {{ selectedMaterial }}
+  </p>
+
+  <p v-if="selectedType">
+    <strong>Selected Bead:</strong>
+    {{ selectedType.type }}
+  </p>
+
+</div>
   <!-- Customize -->
   <button
   v-if= "['watch','bracelet'].includes(product.category)"
@@ -576,5 +605,13 @@ const handleAddToCart = () => {
 
 .dropdown-item:hover {
   background: #f3f3f3;
+}
+.selected-options{
+  margin: 20px 0;
+}
+
+.selected-options p{
+  margin-bottom: 8px;
+  font-size: 15px;
 }
 </style>

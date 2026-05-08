@@ -42,8 +42,16 @@
             </div>
 
             <p class="description">
-              Handmade elegant fashion accessory.
-            </p>
+  {{ item.description }}
+</p>
+
+<p v-if="item.beadType" class="cart-option">
+  Bead: {{ item.beadType }}
+</p>
+
+<p v-if="item.color" class="cart-option">
+  Colour: {{ item.color }}
+</p>
 
             <div class="bottom-row">
 
@@ -83,17 +91,12 @@
           <span>Complimentary</span>
         </div>
 
-        <div class="summary-row">
-          <span>Estimated Tax</span>
-          <span>$16.15</span>
-        </div>
+      <hr />
 
-        <hr />
-
-        <div class="summary-row total-row">
-          <span>Total</span>
-          <span>${{ total + 16.15 }}</span>
-        </div>
+<div class="summary-row total-row">
+  <span>Total</span>
+  <span>${{ total }}</span>
+</div>
 
         <button class="checkout-btn">
           Proceed to Checkout
@@ -113,16 +116,20 @@
 import { computed } from 'vue'
 import { cart } from '../store/cart'
 
+/* REMOVE ITEM */
 const removeItem = (id) => {
-  const index = cart.findIndex(item => item.id === id)
+  const index = cart.value.findIndex(
+    item => item.id === id
+  )
 
   if (index !== -1) {
-    cart.splice(index, 1)
+    cart.value.splice(index, 1)
   }
 }
 
+/* TOTAL PRICE */
 const total = computed(() => {
-  return cart.reduce((sum, item) => {
+  return cart.value.reduce((sum, item) => {
     return sum + Number(item.price)
   }, 0)
 })
