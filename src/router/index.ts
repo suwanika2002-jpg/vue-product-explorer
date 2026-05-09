@@ -4,15 +4,13 @@ import Home from '../pages/Home.vue'
 import ProductList from '../pages/ProductList.vue'
 import ProductDetails from '../pages/ProductDetails.vue'
 import Cart from '../pages/Cart.vue'
-
+import Checkout from '../pages/checkout.vue'
 const routes = [
   { path: '/', component: Home },
   { path: '/products', component: ProductList },
   { path: '/product/:id', component: ProductDetails },
-  {
-  path: '/cart',
-  component: () => import('../pages/Cart.vue')
-}
+  {path: '/cart', component: () => import('../pages/Cart.vue')},
+  {path: '/checkout', component: Checkout}
 ]
 
 const router = createRouter({

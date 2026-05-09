@@ -1,10 +1,6 @@
 <template>
   <div class="cart-page">
 
-    <!-- BACK BUTTON -->
-    <button class="back-btn">
-      ←
-    </button>
 
     <!-- TITLE -->
     <h1 class="cart-heading">Shopping Cart</h1>
@@ -97,10 +93,12 @@
   <span>Total</span>
   <span>${{ total }}</span>
 </div>
-
-        <button class="checkout-btn">
-          Proceed to Checkout
-        </button>
+<button
+  class="checkout-btn"
+  @click="router.push('/checkout')"
+>
+  Proceed to Checkout
+</button>
 
         <p class="promo">
           Enter Promo Code
@@ -115,7 +113,9 @@
 <script setup>
 import { computed } from 'vue'
 import { cart } from '../store/cart'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 /* REMOVE ITEM */
 const removeItem = (id) => {
   const index = cart.value.findIndex(
@@ -143,22 +143,11 @@ const total = computed(() => {
   min-height: 100vh;
 }
 
-/* BACK BUTTON */
-.back-btn{
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  border: none;
-  background: #5b001e;
-  color: white;
-  font-size: 35px;
-  cursor: pointer;
-  margin-bottom: 10px;
-}
+
 
 /* TITLE */
 .cart-heading{
-  font-size: 55px;
+  font-size: 40px;
   color: #5b001e;
   font-weight: 800;
   margin-bottom: 20px;

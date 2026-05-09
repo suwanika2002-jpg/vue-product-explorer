@@ -323,26 +323,36 @@ const finalPrice = computed(() => {
 <style scoped>
 
 .page {
-  padding: 60px 100px;
+  padding: 60px ;
   background: #fdf6f6;
+  align-items: flex-start;
+
 }
 
 /* layout */
 .container {
   display: flex;
   gap: 60px;
-  align-items: flex-start;
+ 
 }
 
 /* LEFT */
 .left img {
-  width: 500px;
-  border-radius: 10px;
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 20px;
+  position: sticky;
+  top: 40px;
 }
 
 /* RIGHT */
 .right {
   width: 400px;
+  background: #f3eded;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   align-self: flex-start;
   
   
@@ -411,7 +421,8 @@ const finalPrice = computed(() => {
 .material-images {
   display: flex;
   gap: 15px;
-  margin-top: 10px;
+  margin-top: 20px;
+  
 }
 
 .material-card {
