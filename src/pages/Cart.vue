@@ -79,7 +79,7 @@
 
         <div class="summary-row">
           <span>Subtotal</span>
-          <span>${{ total }}</span>
+          <span>${{ total.toFixed(2) }}</span>
         </div>
 
         <div class="summary-row">

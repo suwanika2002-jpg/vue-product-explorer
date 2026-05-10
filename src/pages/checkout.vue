@@ -394,7 +394,7 @@ const handlePayment = () => {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.3);
-
+    
   display: flex;
   justify-content: center;
   align-items: center;
@@ -403,7 +403,8 @@ const handlePayment = () => {
 /* SUCCESS */
 
 .success-popup{
-  width: 420px;
+  width: 320px;
+  height: 300px;
   background: #e5e5e5;
   text-align: center;
   padding: 80px 30px 40px;
@@ -427,8 +428,8 @@ const handlePayment = () => {
   border-top-right-radius: 20px;
 }
 .success-circle{
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
   background: green;
   color: white;
 
@@ -438,7 +439,7 @@ const handlePayment = () => {
   justify-content: center;
   align-items: center;
 
-  font-size: 60px;
+  font-size: 50px;
   font-weight: bold;
 
   position: absolute;
@@ -448,13 +449,13 @@ const handlePayment = () => {
 }
 
 .success-popup h1{
-  font-size: 42px;
+  font-size: 32px;
   margin-bottom: 20px;
 }
 
 .success-popup p{
-  line-height: 1.8;
-  margin-bottom: 40px;
+  line-height: 1.6;
+  margin-bottom: 20px;
 }
 
 .continue-btn{
@@ -476,7 +477,8 @@ const handlePayment = () => {
 /* FAILED */
 
 .failed-popup{
-  width: 420px;
+  width: 320px;
+  height:300px;
   background: #e5e5e5;
   text-align: center;
   padding: 80px 30px 40px;
@@ -501,8 +503,8 @@ border-radius: 20px 20px 0px 0px;
 }
 
 .failed-circle{
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
   background: rgb(180, 10, 10);
   color: white;
     border-radius: 50%;
@@ -511,7 +513,7 @@ border-radius: 20px 20px 0px 0px;
   justify-content: center;
   align-items: center;
 
-  font-size: 60px;
+  font-size: 50px;
   font-weight: bold;
 
   position: absolute;
@@ -526,8 +528,8 @@ border-radius: 20px 20px 0px 0px;
 }
 
 .failed-popup p{
-  line-height: 1.8;
-  margin-bottom: 40px;
+  line-height: 1.6;
+  margin-bottom: 20px;
 }
 
 .try-btn{

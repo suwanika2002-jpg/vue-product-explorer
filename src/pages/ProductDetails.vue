@@ -213,10 +213,6 @@ const finalPrice = computed(() => {
     {{ selectedColor }}
   </p>
 
-  <p v-if="selectedMaterial">
-    <strong>Selected Material:</strong>
-    {{ selectedMaterial }}
-  </p>
 
   <p v-if="selectedType">
     <strong>Selected Bead:</strong>
@@ -272,16 +268,16 @@ const finalPrice = computed(() => {
           <p>Material</p>
 
           <div class="material-images">
-            <div 
+          <div 
               v-for="m in materials" 
               :key="m.name"
               class="material-card"
               :class="{ active: selectedMaterial?.name === m.name }"
               @click="selectMaterial(m)"
             >
-              <img :src="m.image" />
-              <p>{{ m.name }}</p>
-            </div>
+          <img :src="m.image" />
+          <p>{{ m.name }}</p>
+          </div>
           </div>
 
           <!-- COLOURS -->
@@ -353,9 +349,10 @@ const finalPrice = computed(() => {
   padding: 30px;
   border-radius: 20px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  align-self: flex-start;
-  
-  
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 /* title */
@@ -375,20 +372,24 @@ const finalPrice = computed(() => {
 .price {
   font-size: 20px;
   font-weight: bold;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
 
 /* options */
 .options {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: bold;
 }
 
 .options button {
   padding: 6px 12px;
   border-radius: 20px;
-  border: 1px solid #ccc;
+  border: 4px solid #ccc;
   background: white;
   cursor: pointer;
 }
@@ -418,20 +419,24 @@ const finalPrice = computed(() => {
   font-size: 12px;
   color: #555;
 }
+
 .material-images {
   display: flex;
-  gap: 15px;
-  margin-top: 20px;
-  
+  gap: 20px;
+  margin-top: 5px;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .material-card {
   width: 100px;
   text-align: center;
   cursor: pointer;
-  border: 1px solid #ddd;
-  padding: 8px;
+  border: 5px solid #b19999;
+  padding: 5px;
   border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .material-card img {
@@ -452,9 +457,11 @@ const finalPrice = computed(() => {
 
 .color-box {
   padding: 6px 10px;
-  border: 1px solid #ccc;
+  border: 3px solid #ccc;
   cursor: pointer;
   border-radius: 5px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .color-box.active {
