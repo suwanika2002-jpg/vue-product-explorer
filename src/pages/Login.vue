@@ -1,12 +1,24 @@
 <script setup>
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
+const username = ref('')
+const password = ref('')
+const errormessage = ref('')
 const router = useRouter()
 const emit = defineEmits(['close'])
+// demo login
+const correctUsername = 'user123'
+const correctPassword = 'pass123'
+
 
 const goToProducts = () => {
-  emit('close')
-  router.push('/products')
+  if (username.value === correctUsername && password.value === correctPassword) {
+    emit('close')
+    router.push('/products')
+  } else {
+    errormessage.value = 'Invalid username or password'
+  }
 }
 </script>
 <template>
@@ -24,9 +36,16 @@ const goToProducts = () => {
           <h2>Login</h2>
           <p class="subtitle">Enter your username and password to access</p>
           <label>Username</label>
-          <input type="text" />
+          <input type="text" 
+                placeholder="User name"
+                v-model="username"
+                />
           <label>Password</label>
-          <input type="password" />
+          <input type="password"
+            placeholder="Password"
+            v-model="password" />
+            <!-- error message -->
+            <p class="error" v-if="errormessage">{{ errormessage }}</p>
           <p class="signup-text">Don't have an account? <a href="#">Sign up</a></p>
           <button class="login-btn" @click ="goToProducts">Login Now</button>
         </div>
@@ -159,7 +178,7 @@ const goToProducts = () => {
 }
 
 .signup-text a:hover {
-  color: #5a3d34;
+  color: #080301;
 }
 
 /* ===== BUTTON ===== */
@@ -168,7 +187,7 @@ const goToProducts = () => {
   padding: 12px;
   width: 200px;
   align-self: center;
-  background: #6d4c41;
+  background: #550611;
   color: white;
   border: none;
   border-radius: 25px;
@@ -178,6 +197,13 @@ const goToProducts = () => {
 }
 
 .login-btn:hover {
-  background: #5a3d34;
+  background: #8f1616;
+}
+.error {
+  color: #911515;
+  font-size: 14px;
+  margin-top: -8px;
+  margin-bottom: 10px;
+  text-align: center;
 }
 </style>

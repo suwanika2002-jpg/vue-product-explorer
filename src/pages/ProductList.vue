@@ -9,7 +9,11 @@ const products = ref([])
 const allProducts = ref([])
 const showAll = ref(false)
 const currentCategory = ref('all')
+const showMenu = ref(false)
 
+const toggleMenu = () => {
+  showMenu.value = !showMenu.value
+}
 onMounted(async () => {
   try {
     
@@ -102,6 +106,7 @@ const goToDetails = (id) => {
     <button>Search</button>
   </div>
 </div>
+
 
     <!-- HERO SECTION -->
     <div class="hero-card">

@@ -206,20 +206,7 @@ const finalPrice = computed(() => {
   </div>
 
 </div>
-<div v-if="showCustomize" class="selected-options">
 
-  <p v-if="selectedColor">
-    <strong>Selected Colour:</strong>
-    {{ selectedColor }}
-  </p>
-
-
-  <p v-if="selectedType">
-    <strong>Selected Bead:</strong>
-    {{ selectedType.type }}
-  </p>
-
-</div>
   <!-- Customize -->
   <button
   v-if= "['watch','bracelet'].includes(product.category)"
@@ -298,7 +285,25 @@ const finalPrice = computed(() => {
           </div>
 
         </div>
+<div v-if="showCustomize" class="selected-options">
 
+    <!-- Watch -->
+     <p v-if="selectedMaterial">
+    <strong>Selected Material:</strong>
+    {{ selectedMaterial.name }}
+  </p>
+  <p v-if="selectedColor">
+    <strong>Selected Colour:</strong>
+    {{ selectedColor }}
+  </p>
+
+
+  <p v-if="selectedType">
+    <strong>Selected Bead:</strong>
+    {{ selectedType.type }}
+  </p>
+
+</div>
         <!-- ADD TO CART -->
        <button class="cart-btn" @click="handleAddToCart">
   Add to Cart
