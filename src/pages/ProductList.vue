@@ -1,9 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 // 🔹 1. Your CUSTOM PRODUCTS (IMPORTANT)
-    import {customProducts } from '../data/products'
+import { customProducts } from '../data/products'
 import { useRouter } from 'vue-router'
-    const router = useRouter()
+
+const router = useRouter()
 
 const products = ref([])
 const allProducts = ref([])
@@ -11,22 +12,30 @@ const showAll = ref(false)
 const currentCategory = ref('all')
 const showMenu = ref(false)
 
+const searchText = ref('')
+const searchResults = ref([])
+const searching = ref(false)
+
 const toggleMenu = () => {
   showMenu.value = !showMenu.value
 }
+
 onMounted(async () => {
   try {
-    
 
     // 🔹 2. Get general products
     const res = await fetch('https://dummyjson.com/products')
     const data = await res.json()
 
     // 🔹 3. Get watches separately
-    const res2 = await fetch('https://dummyjson.com/products/category/mens-watches')
+    const res2 = await fetch(
+      'https://dummyjson.com/products/category/mens-watches'
+    )
     const data2 = await res2.json()
 
-    const res3 = await fetch('https://dummyjson.com/products/category/womens-watches')
+    const res3 = await fetch(
+      'https://dummyjson.com/products/category/womens-watches'
+    )
     const data3 = await res3.json()
 
     // 🔹 4. Combine API data
@@ -35,11 +44,13 @@ onMounted(async () => {
       ...data2.products,
       ...data3.products
     ]
-    const filteredAPI = apiProducts.filter(p =>
-      p.category === 'mens-watches' ||
-      p.category === 'womens-watches' ||
-      p.category === 'beauty' ||
-      p.category === 'fragrances'
+
+    const filteredAPI = apiProducts.filter(
+      p =>
+        p.category === 'mens-watches' ||
+        p.category === 'womens-watches' ||
+        p.category === 'beauty' ||
+        p.category === 'fragrances'
     )
 
     // 🔹 5. Map API products to YOUR categories
@@ -49,9 +60,11 @@ onMounted(async () => {
       price: p.price,
       image: p.thumbnail,
       category:
-        p.category === 'mens-watches' || p.category === 'womens-watches'
+        p.category === 'mens-watches' ||
+        p.category === 'womens-watches'
           ? 'watch'
-          : p.category === 'beauty' || p.category === 'fragrances' 
+          : p.category === 'beauty' ||
+            p.category === 'fragrances'
           ? 'cosmatics'
           : 'other'
     }))
@@ -63,7 +76,7 @@ onMounted(async () => {
     products.value = allProducts.value.slice(0, 6)
 
   } catch (error) {
-    console.error("Error loading products:", error)
+    console.error('Error loading products:', error)
   }
 })
 
@@ -78,10 +91,39 @@ const filterCategory = (cat) => {
   if (cat === 'all') {
     filtered = allProducts.value
   } else {
-    filtered = allProducts.value.filter(p => p.category === cat)
+    filtered = allProducts.value.filter(
+      p => p.category === cat
+    )
   }
 
   products.value = filtered.slice(0, 6)
+}
+
+
+// 🔹 SEARCH FUNCTION
+const searchProducts = () => {
+  const keyword = searchText.value.toLowerCase().trim()
+
+  if (!keyword) {
+    searching.value = false
+    searchResults.value = []
+    return
+  }
+
+  searchResults.value = allProducts.value.filter(product =>
+    product.title.toLowerCase().includes(keyword) ||
+    product.category.toLowerCase().includes(keyword)
+  )
+
+  searching.value = true   // <-- this hides the hero section
+}
+
+
+// 🔹 CLEAR SEARCH
+const clearSearch = () => {
+  searchText.value = ''
+  searching.value = false
+  searchResults.value = []
 }
 
 
@@ -92,22 +134,39 @@ const showMore = () => {
 }
 
 const goToDetails = (id) => {
-  // Navigate to details page with product ID
   router.push(`/product/${id}`)
 }
-
 </script>
 <template>
 
- <div class="product-page">
-  <div class="search-section">
-  <div class="search-bar">
-    <input type="text" placeholder="Search by keyword or item" />
-    <button>Search</button>
-  </div>
-</div>
+  <div class="product-page">
 
+    <!-- SEARCH BAR -->
+    <div class="search-container">
 
+      <input
+        v-model="searchText"
+        type="text"
+        placeholder="Search by keyword or item"
+        class="search-input"
+      />
+
+      <button 
+      v-if ="!searching"
+      @click="searchProducts"
+      class ="search-btn"
+      >
+        Search
+      </button>
+      <button
+        v-else
+        @click="clearSearch"
+        class="clear-btn">
+        Clear
+        </button> 
+
+    </div>
+<div v-if= "!searching">
     <!-- HERO SECTION -->
     <div class="hero-card">
       <div class="hero-content">
@@ -115,61 +174,122 @@ const goToDetails = (id) => {
         <button class="explore-btn">Explore</button>
       </div>
     </div>
+     
+
+    <!-- CATEGORY SECTION -->
     <div class="category-section">
-  <div class="category-item" @click="filterCategory('bracelet')">
-    <img src="/images/Blossom-glow-bracelet.jpg" alt="Bracelets" />
-    <span class="tag">Bracelets</span>
-  </div>
 
-  <div class="category-item" @click="filterCategory('earring')">
-    <img src="/images/Rinestone-stud.jpg" alt="Earrings" />
-    <span class="tag">Earrings</span>
-  </div>
-
-  <div class="category-item" @click="filterCategory('watch')">
-    <img src="/images/watch .jpg" alt="Watches" />
-    <span class="tag">Watches</span>
-  </div>
-
-  <div class="category-item" @click="filterCategory('cosmatics')">
-    <img src="/images/cosmatics.jpg" alt="Cosmatics" />
-    <span class="tag">Cosmatics</span>
-  </div>
-</div>
-
-    <!-- COLLECTION TITLE -->
-    <h3 class="section-title">The Bloom Collection</h3>
-   
-
-      <!-- Product Grid -->
-       <div class ="products-container">
-      <div class="products-grid">
-  <div class="product-card" v-for="product in products" :key="product.id">
-
-    <!-- IMAGE -->
-    <div class="product-img">
-      <img :src="product.image" alt="">
-    </div>
-
-    <!-- BOTTOM CARD -->
-    <div class="product-info">
-      <div class="product-row">
-        <span class="title">{{ product.title }}</span>
-        <span class="price">$ {{ product.price }}</span>
+      <div
+        class="category-item"
+        @click="filterCategory('bracelet')"
+      >
+        <img
+          src="/images/Blossom-glow-bracelet.jpg"
+          alt="Bracelets"
+        />
+        <span class="tag">Bracelets</span>
       </div>
 
-      <button class="view-btn" @click="goToDetails(product.id)">View</button>
+      <div
+        class="category-item"
+        @click="filterCategory('earring')"
+      >
+     
+        <img
+          src="/images/Rinestone-stud.jpg"
+          alt="Earrings"
+        />
+        <span class="tag">Earrings</span>
+      </div>
+
+      <div
+        class="category-item"
+        @click="filterCategory('watch')"
+      >
+        <img
+          src="/images/watch .jpg"
+          alt="Watches"
+        />
+        <span class="tag">Watches</span>
+      </div>
+
+      <div
+        class="category-item"
+        @click="filterCategory('cosmatics')"
+      >
+        <img
+          src="/images/cosmatics.jpg"
+          alt="Cosmatics"
+        />
+        <span class="tag">Cosmatics</span>
+      </div>
+
+    </div>
+
+    <!-- COLLECTION TITLE -->
+    <h3 class="section-title">
+      The Bloom Collection
+    </h3>
+</div>
+    <!-- PRODUCT GRID -->
+    <div class="products-container">
+
+      <div class="products-grid">
+
+        <div
+          class="product-card"
+          v-for="product in (searching ? searchResults : products)"
+          :key="product.id"
+        >
+
+          <!-- IMAGE -->
+          <div class="product-img">
+            <img
+              :src="product.image"
+              alt=""
+            />
+          </div>
+
+          <!-- PRODUCT INFO -->
+          <div class="product-info">
+
+            <div class="product-row">
+              <span class="title">
+                {{ product.title }}
+              </span>
+
+              <span class="price">
+                $ {{ product.price }}
+              </span>
+            </div>
+
+            <button
+              class="view-btn"
+              @click="goToDetails(product.id)"
+            >
+              View
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- SEE MORE -->
+    <div
+      class="see-more"
+      v-if="!showAll && currentCategory === 'all'"
+    >
+      <span @click="showMore">
+        See More >>
+      </span>
     </div>
 
   </div>
-</div>
-       </div>
-   
-     <div class="see-more" v-if="!showAll && currentCategory === 'all'">
-  <span @click="showMore">See More >></span>
-</div>
- </div>
-  
+
 </template>
 
 <style scoped>
@@ -364,41 +484,61 @@ const goToDetails = (id) => {
   text-decoration: underline;
 }
 /* SPACE BELOW NAVBAR */
-.search-section {
+.search-container {
   display: flex;
-  justify-content: right;
-  margin-top: 20px;   /* 👈 GAP from navbar */
-  margin-bottom: 20px; /* 👈 GAP before hero */
+  margin-bottom: 40px;
+  margin-left: auto;
+  align-items: center;
+  gap: 0;
+  width: 400px;
 }
 
-/* SEARCH BAR CONTAINER */
-.search-bar {
-  width: 300px;
-  display: flex;
-  border-radius: 30px;
-  overflow: hidden;
-  background: #eee;
-  align-items: right;
-}
-
-/* INPUT */
-.search-bar input {
-  flex: 1;
-  padding: 12px 20px;
+.search-input {
+  
+  height: 40px;
+  width: 250px;
   border: none;
-  outline: none;
+  background: #f8efef;
+  border-radius: 40px 0 0 40px;
+  padding: 0 30px;
   font-size: 14px;
-  background: transparent;
+  outline: none;
 }
 
-/* BUTTON */
-.search-bar button {
-  padding: 12px 25px;
+.search-btn {
+  width: 100px;
+  height: 40px;
   border: none;
-  background: #5a2a2a;
+  background: #5b0f28;
   color: white;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  border-radius: 0 30px 30px 0;
+  border-radius: 0 40px 40px 0;
+}
+
+.search-btn:hover {
+  background: #74173a;
+}
+
+.suggestions{
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+
+  background: white;
+  border: 1px solid #ddd;
+  z-index: 1000;
+}
+
+.suggestion-item{
+  padding: 12px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover{
+  background: #f5f5f5;
 }
 .category-section {
   display: flex;
