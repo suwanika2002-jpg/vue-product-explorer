@@ -152,17 +152,9 @@ const goToDetails = (id) => {
       />
 
       <button 
-      v-if ="!searching"
-      @click="searchProducts"
-      class ="search-btn"
-      >
-        Search
-      </button>
-      <button
-        v-else
-        @click="clearSearch"
-        class="clear-btn">
-        Clear
+     @click = "searching ? clearSearch() : searchProducts()"
+     class = "search-btn">
+        {{ searching ? 'Clear' : 'Search' }}
         </button> 
 
     </div>

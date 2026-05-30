@@ -323,9 +323,10 @@ const finalPrice = computed(() => {
 
 <style scoped>
 
-.page {
+.dark-mode .page {
   padding: 60px ;
-  background: #fdf6f6;
+  background: #1a1a1a;
+  color: #f3f3f3;
   align-items: flex-start;
 
 }

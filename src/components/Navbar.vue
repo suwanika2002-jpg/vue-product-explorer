@@ -44,18 +44,44 @@
       <span class="nav-link" @click="$emit('openLogin')">Login</span>
 
       <span class="cart-icon" @click="goCart">🛒</span>
+      <button @click="toggleDarkMode" class="dark-mode-btn">
+  {{ isDarkMode ? '☀️ Light' : '🌙 Dark' }}
+</button>
     </div>
   </nav>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const showMenu = ref(false)
+const isDarkMode = ref(false)
+
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
+
+const toggleDarkMode = () => {
+  isDarkMode.value = !isDarkMode.value
+
+  if (isDarkMode.value) {
+    document.body.classList.add('dark-mode')
+  } else {
+    document.body.classList.remove('dark-mode')
+  }
+
+  localStorage.setItem('darkMode', isDarkMode.value)
+}
+
+onMounted(() => {
+  const savedMode = localStorage.getItem('darkMode')
+
+  if (savedMode === 'true') {
+    isDarkMode.value = true
+    document.body.classList.add('dark-mode')
+  }
+})
 const goCart = () => {
   showMenu.value = false
   router.push('/cart')

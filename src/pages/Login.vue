@@ -57,7 +57,7 @@ const goToProducts = () => {
   </div>
 </template>
 
-<style scoped>
+<style >
 /* ===== OVERLAY ===== */
 /* ===== OVERLAY (dark background) ===== */
 .login-overlay {

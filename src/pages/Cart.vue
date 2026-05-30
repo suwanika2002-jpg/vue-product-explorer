@@ -135,11 +135,12 @@ const total = computed(() => {
 })
 </script>
 
-<style scoped>
+<style>
 
-.cart-page{
+.dark-mode .cart-page{
   padding: 40px;
-  background: #f4f4f4;
+  background: #1a1a1a;
+  color: white;
   min-height: 100vh;
 }
 

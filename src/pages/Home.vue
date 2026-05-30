@@ -67,7 +67,7 @@ const emit = defineEmits(['openLogin'])
 </script>
 
 
-<style scoped>
+<style  >
 
 /* ─────────────────────────────────────
    HERO

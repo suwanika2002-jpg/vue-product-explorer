@@ -291,11 +291,17 @@ const handlePayment = () => {
 }
 </script>
 
-<style scoped>
+<style >
 
+.dark-mode .checkout-page{
+ 
+  color: white;
+  background: #1a1a1a;
+  min-height: 100vh;
+}
 .checkout-page{
   padding: 40px;
-  background: #f5f5f5;
+  background: #fdf6f6;
   min-height: 100vh;
 }
 
