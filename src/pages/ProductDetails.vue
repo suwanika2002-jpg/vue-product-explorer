@@ -335,6 +335,8 @@ const finalPrice = computed(() => {
 .container {
   display: flex;
   gap: 60px;
+   margin-top: 40px;        
+  margin-bottom: 40px;    
  
 }
 
@@ -350,7 +352,7 @@ const finalPrice = computed(() => {
 
 /* RIGHT */
 .right {
-  width: 400px;
+  width: 370px;
   background: #f3eded;
   padding: 30px;
   border-radius: 20px;

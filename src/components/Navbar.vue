@@ -44,9 +44,15 @@
       <span class="nav-link" @click="$emit('openLogin')">Login</span>
 
       <span class="cart-icon" @click="goCart">🛒</span>
-      <button @click="toggleDarkMode" class="dark-mode-btn">
-  {{ isDarkMode ? '☀️ Light' : '🌙 Dark' }}
-</button>
+  
+ <label class="toggle-switch">
+  <input
+    type="checkbox"
+    :checked="isDarkMode"
+    @change="toggleDarkMode"
+  >
+  <span class="toggle-slider"></span>
+</label>
     </div>
   </nav>
 </template>
@@ -212,4 +218,43 @@ const logout = () => {
   color: #570013;
   transform: scale(1.2);
 }
+
+/* Toggle container */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+
+.toggle-switch input {
+  display: none; /* Hide the default checkbox */
+}
+
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background:  #7a0027;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.toggle-slider::before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: 2px;
+  top: 2px;
+  background: white;
+  border-radius: 50%;
+  transition: 0.3s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+}
+
 </style>

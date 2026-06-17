@@ -257,5 +257,6 @@ body {
 .dark-mode h2,
 .dark-mode h3,
 .dark-mode p {
-  color: white;
+  color: rgb(230, 188, 188);
+  
 }

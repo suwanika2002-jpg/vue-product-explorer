@@ -81,8 +81,17 @@ onMounted(async () => {
 })
 
 
-// 🔹 FILTER FUNCTION
+// 🔹 FILTER FUNCTION (Toggle Category)
 const filterCategory = (cat) => {
+  // If the same category is clicked again,
+  // go back to showing all products.
+  if (currentCategory.value === cat && cat !== 'all') {
+    currentCategory.value = 'all'
+    showAll.value = false
+    products.value = allProducts.value.slice(0, 6)
+    return
+  }
+
   currentCategory.value = cat
   showAll.value = false
 
@@ -98,7 +107,6 @@ const filterCategory = (cat) => {
 
   products.value = filtered.slice(0, 6)
 }
-
 
 // 🔹 SEARCH FUNCTION
 const searchProducts = () => {
@@ -294,10 +302,14 @@ const goToDetails = (id) => {
 
 /* HERO */
 .hero-card {
-  max-width:1200px;
-  margin-top:20px;
-  width: 80%;
+  position: relative; /* Important */
+
+  max-width: 1100px;
+  width: 90%;
   height: 380px;
+
+  margin: 0 auto 40px;
+
   border-radius: 25px;
   overflow: hidden;
 
@@ -305,29 +317,33 @@ const goToDetails = (id) => {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-position:center;
-  display: flex;
-  align-items: center;
-  padding-left: 60px;
-
-  margin: 0 auto 40px;
 }
 
-/* TEXT */
+/* TEXT BOX */
 .hero-content {
-  background: rgba(255, 255, 255, 0.4); /* light box like figma */
-  padding: 80px 75px;
-  
+  position: absolute;
+
+  /* Left-center position */
+  left: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 250px;
+  padding: 50px 35px;
+
+  background: rgba(255, 255, 255, 0.4);
+ 
+
 }
 
+/* HEADING */
 .hero-content h2 {
   font-size: 28px;
   font-weight: 700;
   color: #570013;
-  margin-bottom: 10px;
-  line-height: 1.6;
+  line-height: 1.4;
+  margin-bottom: 20px;
 }
-
 /* BUTTON */
 .explore-btn {
   background: #570013;
@@ -384,7 +400,7 @@ const goToDetails = (id) => {
 .products-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
+  gap: 40px;
   padding: 40px;
   justify-items: center;
 }
@@ -392,23 +408,22 @@ const goToDetails = (id) => {
 /* CARD */
 .product-card {
   width: 200px;
+  padding: 18px;
+  background: #d9d9d9;
+  border-radius: 28px;
   overflow: hidden;
-  border-radius: 30px;
-  background: transparent;
-  transition: 0.3s;
-  border: 20px solid #ddd;
+  box-sizing:border-box;             /* Remove thick gray border */
+  transition: transform 0.3s;
 }
 
 .product-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-5px);
 }
 
 /* IMAGE */
 .product-img {
   width: 100%;
-  height: 160px;
- 
-  overflow: hidden;
+  height: 140px;
 }
 
 .product-img img {
@@ -417,49 +432,47 @@ const goToDetails = (id) => {
   object-fit: cover;
 }
 
-/* BOTTOM SECTION */
+/* INFO */
 .product-info {
-  background: #f3dede;  /* soft pink like figma */
-  padding: 12px;
- 
-
+  padding: 8px;
+  background: #ecdada;
 }
 
-/* TEXT ROW */
+/* NAME + PRICE */
 .product-row {
   display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  margin-bottom: 10px;
+  flex-direction: column;    /* Stack name and price */
+  gap: 4px;
+  margin-bottom: 8px;
 }
 
 .title {
+  font-size: 10px;           /* Explicitly set small size */
   font-weight: 600;
-  text-align: left;
+  color: #000;
+  line-height: 1.3;
+  margin: 0;
 }
 
 .price {
+  font-size: 10px;
   font-weight: 500;
-  text-align:right;
-  white-space: nowrap;
+  color: #000;
+  margin: 0;
 }
 
 /* BUTTON */
 .view-btn {
-  background: #3b0d0d;
-  color: white;
-  border: none;
-  padding: 6px 22px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 12px;
   display: block;
   margin: 0 auto;
-  
-}
-
-.view-btn:hover {
-  background: #5a1a1a;
+  padding: 5px 18px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  background: #4b000f;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
 }
 .see-more {
   margin-top: 20px;

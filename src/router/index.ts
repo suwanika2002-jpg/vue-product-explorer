@@ -3,7 +3,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../pages/Home.vue'
 import ProductList from '../pages/ProductList.vue'
 import ProductDetails from '../pages/ProductDetails.vue'
-import Cart from '../pages/Cart.vue'
 import Checkout from '../pages/checkout.vue'
 const routes = [
   { path: '/', component: Home },
@@ -15,7 +14,14 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+
+  scrollBehavior() {
+    return {
+      top: 0,
+      left: 0,
+    }
+  }
 })
 
 export default router

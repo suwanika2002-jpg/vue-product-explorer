@@ -1,247 +1,15 @@
-<template>
-  <div class="checkout-page">
-
-    <!-- TITLE -->
-    <h1 class="title">Check Out</h1>
-
-    <!-- DELIVERY OPTIONS -->
-    <div class="option-row">
-
-      <label class="option-card">
-        <input type="radio"
-               name="delivery"
-               value="delivery"
-               checked
-         />
-        <span>Delivery</span>
-      </label>
-
-      <label class="option-card">
-        <input type="radio"
-               name="delivery"
-               value="pickup"
-         />
-        <span>Pick Up</span>
-      </label>
-
-    </div>
-
-    <!-- CUSTOMER DETAILS -->
-    <h2 class="section-title">Customer Details</h2>
-
-    <div class="details-box">
-
-      <div class="input-row">
-
-        <div class="input-group">
-          <label>Full Name</label>
-          <input type="text" v-model="fullName" />
-        </div>
-
-        <div class="input-group">
-          <label>Phone Number</label>
-          <input type="number" v-model="phone" />
-        </div>
-
-      </div>
-
-      <div class="input-group address-group">
-        <label>Delivery Address</label>
-        <input type="text" v-model="address" />
-      </div>
-
-    </div>
-
-    <!-- PAYMENT -->
-    <h2 class="section-title">Payment Method</h2>
-
-    <div class="option-row">
-
-      <label class="option-card">
-        <input type="radio" 
-        name="payment"
-        value="card"
-        v-model="payment" />
-        <span>Credit / Debit Card</span>
-      </label>
-
-      <label class="option-card">
-        <input type="radio"
-               name="payment"
-               value="cash"
-               v-model="payment"
-         />
-        <span>Cash on Delivery</span>
-      </label>
-
-    </div>
-    <!-- Cash on delivery -->
-     <div v-if="payment === 'cash'"
-     class="cash-message">
-     <h3>Cash on Delivery Selected</h3>
-       <p>
-         Your order will be confirmed and  payment can be made upon delivery.
-       </p>
-     </div>
-    <!-- CARD DETAILS -->
-    <div v-if="payment === 'card'"
-    class="card-box">
-
-      <div class="input-group">
-        <label>Name on Card</label>
-        <input type="text" v-model="cardName" />
-      </div>
-
-      <div class="input-group">
-  <label>Card Number</label>
-
-  <input
-    type="text"
-    v-model="cardNumber"
-    @input="formatCardNumber"
-    placeholder="XXXX-XXXX-XXXX-XXXX"
-  />
-</div>
-<div class="small-row">
-<div class="input-group">
-  <label>Expire Date</label>
-
-  <input
-    type="text"
-    v-model="expireDate"
-    @input="formatExpireDate"
-    placeholder="MM/YY"
-  />
-</div>
-
-<div class="input-group cvv">
-  <label>CVV</label>
-
-  <input
-    type="text"
-    v-model="cvv"
-    @input="formatCVV"
-    placeholder="XXX"
-  />
-</div>
-</div>  
-     
-
-    
-
-    <!-- BUTTON -->
-    <button
-      class="pay-btn"
-      @click="handlePayment"
-    >
-      Pay Now
-    </button>
-     </div>
-    </div>
-<!-- THANK YOU SECTION -->
-<div class="thank-you-section">
-
-  <!-- LEFT SIDE -->
-  <div class="thank-left">
-
-    <h2>
-      Thank you for choosing us.
-    </h2>
-
-    <p>
-      We appreciate your support
-    </p>
-
-  </div>
-
-  <!-- RIGHT SIDE -->
-  <div class="thank-right">
-
-    <img
-      src="/images/thankyou.jpg"
-      alt="shopping"
-    />
-
-  </div>
-
-</div>
-
-    <!-- SUCCESS POPUP -->
-    <div
-      v-if="showSuccess"
-      class="popup-overlay"
-    >
-
-      <div class="success-popup">
-
-        <div class="success-circle">
-          ✓
-        </div>
-
-        <h1>Success</h1>
-
-        <p>
-          We are delight to inform you that
-          <br />
-          we receive your payment
-        </p>
-
-        <button
-          class="continue-btn"
-          @click="showSuccess = false"
-        >
-          Continue Shopping
-        </button>
-
-      </div>
-
-    </div>
-
-    <!-- FAILED POPUP -->
-    <div
-      v-if="showFailed"
-      class="popup-overlay"
-    >
-
-      <div class="failed-popup">
-
-        <div class="failed-circle">
-          ✕
-        </div>
-
-        <h1>Payment Failed</h1>
-
-        <p>
-          Unfortunately we have
-          <br />
-          an issue with your payment
-        </p>
-
-        <button
-          class="try-btn"
-          @click="showFailed = false"
-        >
-          Try Again
-        </button>
-
-      </div>
-
-    </div>
-
-  
-</template>
-
 <script setup>
 import { ref } from 'vue'
 
-const fullName = ref('')
-const phone = ref('')
-const address = ref('')
-const cardName = ref('')
+const fullName = ref('Suwanika')
+const phone = ref('0705174872')
+const address = ref('123, Main Street, Kegalle')
+
+const cardName = ref('Suwanika')
 const payment = ref('card')
-const cardNumber = ref('')
-const expireDate = ref('')
-const cvv = ref('')
+const cardNumber = ref('4111-1100-1122-3311')
+const expireDate = ref('12/30')
+const cvv = ref('123')
 
 const formatCardNumber = () => {
   cardNumber.value = cardNumber.value
@@ -250,8 +18,7 @@ const formatCardNumber = () => {
     .slice(0, 19)
 
   if (cardNumber.value.endsWith('-')) {
-    cardNumber.value =
-      cardNumber.value.slice(0, -1)
+    cardNumber.value = cardNumber.value.slice(0, -1)
   }
 }
 
@@ -273,31 +40,326 @@ const showFailed = ref(false)
 
 const handlePayment = () => {
 
+  // Validate Customer Details (required for both payment methods)
   if (
-    !fullName.value ||
-    !phone.value ||
-    !address.value ||
-    !cardName.value ||
-    !cardNumber.value ||
-    !expireDate.value ||
-    !cvv.value
+    !fullName.value.trim() ||
+    !phone.value.trim() ||
+    !address.value.trim()
   ) {
-
+    showSuccess.value = false
     showFailed.value = true
     return
   }
 
-  showSuccess.value = true
+  // Cash on Delivery
+  if (payment.value === 'cash') {
+    showSuccess.value = true
+    showFailed.value = false
+    return
+  }
+
+  // Validate Card Details
+  if (
+    !cardName.value.trim() ||
+    !cardNumber.value.trim() ||
+    !expireDate.value.trim() ||
+    !cvv.value.trim()
+  ) {
+    showSuccess.value = false
+    showFailed.value = true
+    return
+  }
+
+  // Demo Card Validation
+  if (
+    cardName.value === 'Suwanika' &&
+    cardNumber.value === '4111-1100-1122-3311' &&
+    expireDate.value === '12/30' &&
+    cvv.value === '123'
+  ) {
+    showSuccess.value = true
+    showFailed.value = false
+  } else {
+    showSuccess.value = false
+    showFailed.value = true
+  }
 }
+
 </script>
+
+<template>
+  <div class="checkout-page">
+
+    <!-- TITLE -->
+    <h1 class="title">Check Out</h1>
+
+    <!-- DELIVERY OPTIONS -->
+    <div class="option-row">
+      <label class="option-card">
+        <input
+          type="radio"
+          name="delivery"
+          value="delivery"
+          checked
+        />
+        <span>Delivery</span>
+      </label>
+
+      <label class="option-card">
+        <input
+          type="radio"
+          name="delivery"
+          value="pickup"
+        />
+        <span>Pick Up</span>
+      </label>
+    </div>
+
+    <!-- CUSTOMER DETAILS -->
+    <h2 class="section-title">Customer Details</h2>
+
+    <div class="details-box">
+      <div class="input-row">
+
+        <div class="input-group">
+          <label>Full Name</label>
+          <input
+            type="text"
+            v-model="fullName"
+          />
+        </div>
+
+        <div class="input-group">
+          <label>Phone Number</label>
+          <input
+            type="text"
+            v-model="phone"
+            maxlength="10"
+            placeholder="07XXXXXXXX"
+          />
+        </div>
+
+      </div>
+
+      <div class="input-group address-group">
+        <label>Delivery Address</label>
+        <input
+          type="text"
+          v-model="address"
+        />
+      </div>
+    </div>
+
+    <!-- PAYMENT METHOD -->
+    <h2 class="section-title">Payment Method</h2>
+
+    <div class="option-row">
+
+      <label class="option-card">
+        <input
+          type="radio"
+          name="payment"
+          value="card"
+          v-model="payment"
+        />
+        <span>Credit / Debit Card</span>
+      </label>
+
+      <label class="option-card">
+        <input
+          type="radio"
+          name="payment"
+          value="cash"
+          v-model="payment"
+        />
+        <span>Cash on Delivery</span>
+      </label>
+
+    </div>
+
+    <!-- CASH ON DELIVERY -->
+    <div
+      v-if="payment === 'cash'"
+      class="cash-message"
+    >
+      <h3>Cash on Delivery Selected</h3>
+
+      <p>
+        Your order will be confirmed and payment can be made upon delivery.
+      </p>
+
+      <button
+        class="pay-btn"
+        @click="handlePayment"
+      >
+        Confirm Order
+      </button>
+    </div>
+
+    <!-- CARD PAYMENT -->
+    <div
+      v-if="payment === 'card'"
+      class="card-box"
+    >
+
+      <div class="input-group">
+        <label>Name on Card</label>
+        <input
+          type="text"
+          v-model="cardName"
+        />
+      </div>
+
+      <div class="input-group">
+        <label>Card Number</label>
+
+        <input
+          type="text"
+          v-model="cardNumber"
+          @input="formatCardNumber"
+          placeholder="XXXX-XXXX-XXXX-XXXX"
+        />
+      </div>
+
+      <div class="small-row">
+
+        <div class="input-group">
+          <label>Expire Date</label>
+
+          <input
+            type="text"
+            v-model="expireDate"
+            @input="formatExpireDate"
+            placeholder="MM/YY"
+          />
+        </div>
+
+        <div class="input-group cvv">
+          <label>CVV</label>
+
+          <input
+            type="text"
+            v-model="cvv"
+            @input="formatCVV"
+            placeholder="XXX"
+          />
+        </div>
+
+      </div>
+
+      <button
+        class="pay-btn"
+        type = "button"
+        @click="handlePayment"
+      >
+        Pay Now
+      </button>
+
+    </div>
+
+    <!-- THANK YOU -->
+    <div class="thank-you-section">
+
+      <div class="thank-left">
+        <h2>Thank you for choosing us.</h2>
+        <p>We appreciate your support.</p>
+      </div>
+
+      <div class="thank-right">
+        <img
+          src="/images/thankyou.jpg"
+          alt="shopping"
+        />
+      </div>
+
+    </div>
+
+    <!-- SUCCESS POPUP -->
+    <div
+      v-if="showSuccess"
+      class="popup-overlay"
+    >
+      <div class="success-popup">
+
+        <div class="success-circle">
+          ✓
+        </div>
+
+        <h1>Success</h1>
+
+        <p>
+          We are delighted to inform you that
+          <br />
+          we received your payment.
+        </p>
+
+        <button
+          class="continue-btn"
+          @click="showSuccess = false"
+        >
+          Continue Shopping
+        </button>
+
+      </div>
+    </div>
+
+    <!-- FAILED POPUP -->
+    <div
+      v-if="showFailed"
+      class="popup-overlay"
+    >
+      <div class="failed-popup">
+
+        <div class="failed-circle">
+          ✕
+        </div>
+
+        <h1>Payment Failed</h1>
+
+        <p>
+          Unfortunately, there was an issue with your payment.
+        </p>
+
+        <button
+          class="try-btn"
+          @click="showFailed = false"
+        >
+          Try Again
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+</template>
+
+
 
 <style >
 
-.dark-mode .checkout-page{
- 
-  color: white;
+.dark-mode .checkout-page {
   background: #1a1a1a;
+  color: rgb(224, 181, 181);
   min-height: 100vh;
+}
+
+/* Labels inside the boxes */
+.dark-mode .details-box label,
+.dark-mode .card-box label {
+  color: #000 ;
+}
+
+/* Input text */
+.dark-mode .details-box input,
+.dark-mode .card-box input {
+  color: #000 ;
+  background-color: #f5f5f5;
+}
+
+/* Placeholder text */
+.dark-mode .details-box input::placeholder,
+.dark-mode .card-box input::placeholder {
+  color: #666;
 }
 .checkout-page{
   padding: 40px;
@@ -416,7 +478,7 @@ const handlePayment = () => {
   padding: 80px 30px 40px;
   position: relative;
 
-  border-radius: 20px 20px 0px 20px;
+  border-radius: 20px 20px 0px 0px;
 }
 
 .success-popup::before{
@@ -620,4 +682,5 @@ border-radius: 20px 20px 0px 0px;
   font-size: 16px;
   line-height: 1.6;
 }
+
 </style>
