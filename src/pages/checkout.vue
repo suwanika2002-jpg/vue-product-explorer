@@ -37,6 +37,7 @@ const formatCVV = () => {
 
 const showSuccess = ref(false)
 const showFailed = ref(false)
+const showOrderSuccess = ref(false)
 
 const handlePayment = () => {
 
@@ -51,12 +52,13 @@ const handlePayment = () => {
     return
   }
 
-  // Cash on Delivery
-  if (payment.value === 'cash') {
-    showSuccess.value = true
-    showFailed.value = false
-    return
-  }
+// Cash on Delivery
+if (payment.value === 'cash') {
+  showOrderSuccess.value = true
+  showSuccess.value = false
+  showFailed.value = false
+  return
+}
 
   // Validate Card Details
   if (
@@ -164,8 +166,7 @@ const handlePayment = () => {
         />
         <span>Credit / Debit Card</span>
       </label>
-
-      <label class="option-card">
+   <label class="option-card">
         <input
           type="radio"
           name="payment"
@@ -177,163 +178,108 @@ const handlePayment = () => {
 
     </div>
 
-    <!-- CASH ON DELIVERY -->
-    <div
-      v-if="payment === 'cash'"
-      class="cash-message"
+  <!-- CASH ON DELIVERY -->
+<div
+  v-if="payment === 'cash'"
+  class="cash-message"
+>
+  <h3>Cash on Delivery Selected</h3>
+
+  <p>
+    Your order will be confirmed and payment can be made upon delivery.
+  </p>
+
+  <button
+    class="pay-btn"
+    type="button"
+    @click="handlePayment"
+  >
+    Confirm Order
+  </button>
+</div>
+
+<!-- ORDER SUCCESS POPUP -->
+<div
+  v-if="showOrderSuccess"
+  class="popup-overlay"
+>
+  <div class="success-popup">
+
+    <div class="success-circle">
+      ✓
+    </div>
+
+    <h1>Order Successfully Placed!</h1>
+
+    <p class="order-message">
+      We've received your order successfully.
+    </p>
+
+    <button
+      class="continue-btn"
+      @click="showOrderSuccess = false"
     >
-      <h3>Cash on Delivery Selected</h3>
-
-      <p>
-        Your order will be confirmed and payment can be made upon delivery.
-      </p>
-
-      <button
-        class="pay-btn"
-        @click="handlePayment"
-      >
-        Confirm Order
-      </button>
-    </div>
-
-    <!-- CARD PAYMENT -->
-    <div
-      v-if="payment === 'card'"
-      class="card-box"
-    >
-
-      <div class="input-group">
-        <label>Name on Card</label>
-        <input
-          type="text"
-          v-model="cardName"
-        />
-      </div>
-
-      <div class="input-group">
-        <label>Card Number</label>
-
-        <input
-          type="text"
-          v-model="cardNumber"
-          @input="formatCardNumber"
-          placeholder="XXXX-XXXX-XXXX-XXXX"
-        />
-      </div>
-
-      <div class="small-row">
-
-        <div class="input-group">
-          <label>Expire Date</label>
-
-          <input
-            type="text"
-            v-model="expireDate"
-            @input="formatExpireDate"
-            placeholder="MM/YY"
-          />
-        </div>
-
-        <div class="input-group cvv">
-          <label>CVV</label>
-
-          <input
-            type="text"
-            v-model="cvv"
-            @input="formatCVV"
-            placeholder="XXX"
-          />
-        </div>
-
-      </div>
-
-      <button
-        class="pay-btn"
-        type = "button"
-        @click="handlePayment"
-      >
-        Pay Now
-      </button>
-
-    </div>
-
-    <!-- THANK YOU -->
-    <div class="thank-you-section">
-
-      <div class="thank-left">
-        <h2>Thank you for choosing us.</h2>
-        <p>We appreciate your support.</p>
-      </div>
-
-      <div class="thank-right">
-        <img
-          src="/images/thankyou.jpg"
-          alt="shopping"
-        />
-      </div>
-
-    </div>
-
-    <!-- SUCCESS POPUP -->
-    <div
-      v-if="showSuccess"
-      class="popup-overlay"
-    >
-      <div class="success-popup">
-
-        <div class="success-circle">
-          ✓
-        </div>
-
-        <h1>Success</h1>
-
-        <p>
-          We are delighted to inform you that
-          <br />
-          we received your payment.
-        </p>
-
-        <button
-          class="continue-btn"
-          @click="showSuccess = false"
-        >
-          Continue Shopping
-        </button>
-
-      </div>
-    </div>
-
-    <!-- FAILED POPUP -->
-    <div
-      v-if="showFailed"
-      class="popup-overlay"
-    >
-      <div class="failed-popup">
-
-        <div class="failed-circle">
-          ✕
-        </div>
-
-        <h1>Payment Failed</h1>
-
-        <p>
-          Unfortunately, there was an issue with your payment.
-        </p>
-
-        <button
-          class="try-btn"
-          @click="showFailed = false"
-        >
-          Try Again
-        </button>
-
-      </div>
-    </div>
+      Continue Shopping
+    </button>
 
   </div>
+</div>
+
+<!-- CARD PAYMENT -->
+<div
+  v-if="payment === 'card'"
+  class="card-box"
+>
+  <div class="input-group">
+    <label>Name on Card</label>
+    <input
+      type="text"
+      v-model="cardName"
+    />
+  </div>
+
+  <div class="input-group">
+    <label>Card Number</label>
+    <input
+      type="text"
+      v-model="cardNumber"
+      @input="formatCardNumber"
+      placeholder="XXXX-XXXX-XXXX-XXXX"
+    />
+  </div>
+
+  <div class="small-row">
+    <div class="input-group">
+      <label>Expire Date</label>
+      <input
+        type="text"
+        v-model="expireDate"
+        @input="formatExpireDate"
+        placeholder="MM/YY"
+      />
+    </div>
+
+    <div class="input-group cvv">
+      <label>CVV</label>
+      <input
+        type="text"
+        v-model="cvv"
+        @input="formatCVV"
+        placeholder="XXX"
+      />
+    </div>
+  </div>
+
+  <button
+    class="pay-btn"
+    type="button"
+    @click="handlePayment"
+  >
+    Pay Now
+  </button>
+</div>
+</div>
 </template>
-
-
 
 <style >
 
@@ -682,5 +628,24 @@ border-radius: 20px 20px 0px 0px;
   font-size: 16px;
   line-height: 1.6;
 }
+/* Keep Delivery and Pick Up text black in dark mode */
+.dark-mode .option-card,
+.dark-mode .option-card span,
+.dark-mode .option-card label {
+  color: #000 !important;
+}
+.success-popup h1{
+    font-size: 25px;
+    margin-bottom: 5px;
+}
 
+.order-message{
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 5px 0;
+}
+
+.continue-btn{
+    font-size: 15px;
+}
 </style>

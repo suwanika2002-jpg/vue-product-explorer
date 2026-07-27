@@ -85,15 +85,21 @@ const total = computed(() => {
               {{ item.description }}
             </p>
 
-            <div class="option-tags" v-if="item.beadType || item.color">
-              <span v-if="item.beadType" class="option-tag">
-                Bead: {{ item.beadType }}
-              </span>
-              <span v-if="item.color" class="option-tag">
-                Colour: {{ item.color }}
-              </span>
-            </div>
+            <div class="option-tags" v-if="item.beadType || item.material || item.color">
 
+  <span v-if="item.beadType" class="option-tag">
+    Bead: {{ item.beadType }}
+  </span>
+
+  <span v-if="item.material" class="option-tag">
+    Material: {{ item.material }}
+  </span>
+
+  <span v-if="item.color" class="option-tag">
+    Colour: {{ item.color }}
+  </span>
+
+</div>
             <div class="bottom-row">
 
               <!-- QUANTITY -->
@@ -170,7 +176,7 @@ const total = computed(() => {
 </template>
 
 
-<style>
+<style scoped>
 
 /* CART PAGE */
 .cart-page {

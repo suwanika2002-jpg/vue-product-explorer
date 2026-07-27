@@ -76,16 +76,19 @@ onMounted(async () => {
      {
      name: "Leather Strap",
      image: "/images/leather strap.jpeg",
+     price: "184.99",
      colors: ["Black", "Brown", "Dark Blue"]
   },
   {
     name: "Metal Strap",
     image: "/images/metal strap.jpeg",
+    price: "229.99",
     colors: ["Silver", "Gold", "Rose Gold"]
   },
    {
      name: "Silicone Strap",
      image: "/images/silicon strap.jpeg",
+     price: "149.99",
      colors: ["Black", "White", "Blue", "Pink"]
    },
   ]
@@ -142,6 +145,7 @@ const handleAddToCart = () => {
 }
 const finalPrice = computed(() => {
 
+  // Bracelet customization
   if (
     showCustomize.value &&
     selectedType.value &&
@@ -150,6 +154,16 @@ const finalPrice = computed(() => {
     return Number(selectedType.value.price)
   }
 
+  // Watch customization
+  if (
+    showCustomize.value &&
+    selectedMaterial.value &&
+    selectedMaterial.value.price
+  ) {
+    return Number(selectedMaterial.value.price)
+  }
+
+  // Default product price
   return Number(product.value.price)
 })
 </script>
@@ -252,20 +266,28 @@ const finalPrice = computed(() => {
         >
 
           <!-- MATERIAL -->
-          <p>Material</p>
+        <!-- MATERIAL -->
+<p>Material</p>
 
-          <div class="material-images">
-          <div 
-              v-for="m in materials" 
-              :key="m.name"
-              class="material-card"
-              :class="{ active: selectedMaterial?.name === m.name }"
-              @click="selectMaterial(m)"
-            >
-          <img :src="m.image" />
-          <p>{{ m.name }}</p>
-          </div>
-          </div>
+<div class="material-images">
+  <div
+    v-for="m in materials"
+    :key="m.name"
+    class="material-card"
+    :class="{ active: selectedMaterial?.name === m.name }"
+    @click="selectMaterial(m)"
+  >
+    <img :src="m.image" />
+
+    <p class="material-name">
+      {{ m.name }}
+    </p>
+
+    <p class="material-price">
+      £{{ m.price }}
+    </p>
+  </div>
+</div>
 
           <!-- COLOURS -->
           <div v-if="selectedMaterial">
@@ -323,21 +345,23 @@ const finalPrice = computed(() => {
 
 <style scoped>
 
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap');
+
 .dark-mode .page {
-  padding: 60px ;
-  background: #1a1a1a;
+  padding: 60px;
+  background: #141010;
   color: #f3f3f3;
   align-items: flex-start;
-
+  font-family: 'Poppins', sans-serif;
 }
 
 /* layout */
 .container {
   display: flex;
   gap: 60px;
-   margin-top: 40px;        
-  margin-bottom: 40px;    
- 
+  margin-top: 40px;
+  margin-bottom: 40px;
+  font-family: 'Poppins', sans-serif;
 }
 
 /* LEFT */
@@ -348,39 +372,74 @@ const finalPrice = computed(() => {
   border-radius: 20px;
   position: sticky;
   top: 40px;
+  box-shadow: 0 20px 45px rgba(0,0,0,0.28), 0 0 0 6px #ffffff, 0 0 0 8px #c9a875;
+  transition: transform 0.4s ease;
+}
+
+.left img:hover {
+  transform: scale(1.03) rotate(-0.5deg);
 }
 
 /* RIGHT */
 .right {
   width: 370px;
-  background: #f3eded;
-  padding: 30px;
+  background: linear-gradient(180deg, #faf3f0 0%, #f3eded 100%);
+  padding: 34px 32px;
   border-radius: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 30px rgba(109,47,47,0.15);
+  border-top: 4px solid #c9a875;
 
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 
+/* section heading, e.g. "Bead Types" / "Material" */
+.right h2,
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #4a1f1f;
+  margin: 10px 0 14px;
+}
+
 /* title */
 .title {
-  font-size: 28px;
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #4a1f1f;
   margin-bottom: 10px;
+  letter-spacing: 0.3px;
 }
 
 /* description */
 .desc {
   font-size: 14px;
-  color: #555;
+  color: #6b5c5c;
   margin-bottom: 15px;
+  line-height: 1.6;
 }
 
 /* price */
 .price {
-  font-size: 20px;
-  font-weight: bold;
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #6d2f2f;
   margin-bottom: 5px;
+  position: relative;
+}
+
+.price::after {
+  content: "";
+  display: block;
+  width: 36px;
+  height: 3px;
+  background: #c9a875;
+  margin-top: 8px;
+  border-radius: 2px;
 }
 
 /* options */
@@ -391,32 +450,102 @@ const finalPrice = computed(() => {
   gap: 10px;
   margin-bottom: 10px;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .options button {
-  padding: 6px 12px;
+  padding: 8px 18px;
   border-radius: 20px;
-  border: 4px solid #ccc;
+  border: 2px solid #d8c3c3;
   background: white;
   cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.options button:hover {
+  border-color: #6d2f2f;
+  color: #6d2f2f;
+}
+
+/* small inline button pair, e.g. "Available Colours" + "Customize" */
+.btn-row {
+  display: flex;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.btn-outline {
+  padding: 10px 20px;
+  border-radius: 25px;
+  border: 2px solid #6d2f2f;
+  background: white;
+  color: #6d2f2f;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-outline:hover {
+  background: #f3eded;
+  transform: translateY(-2px);
+}
+
+.btn-solid {
+  padding: 10px 20px;
+  border-radius: 25px;
+  border: none;
+  background: linear-gradient(135deg, #6d2f2f 0%, #8b3d3d 100%);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(109,47,47,0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-solid:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(109,47,47,0.4);
 }
 
 /* add to cart */
 .cart-btn {
   width: 100%;
-  padding: 12px;
-  background: #6d2f2f;
+  padding: 14px;
+  background: linear-gradient(135deg, #6d2f2f 0%, #8b3d3d 100%);
   color: white;
   border: none;
   border-radius: 25px;
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
   cursor: pointer;
   margin-top: 20px;
+  box-shadow: 0 8px 20px rgba(109,47,47,0.35);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cart-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
 }
 
 .cart-btn:hover {
-  background: #8b3d3d;
+  background: linear-gradient(135deg, #7d3939 0%, #9c4747 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(109,47,47,0.45);
+}
+
+.cart-btn:hover::before {
+  left: 130%;
 }
 
 /* extra text */
@@ -425,7 +554,8 @@ const finalPrice = computed(() => {
   display: flex;
   gap: 20px;
   font-size: 12px;
-  color: #555;
+  color: #7a6a6a;
+  font-weight: 500;
 }
 
 .material-images {
@@ -440,22 +570,32 @@ const finalPrice = computed(() => {
   width: 100px;
   text-align: center;
   cursor: pointer;
-  border: 5px solid #b19999;
-  padding: 5px;
-  border-radius: 8px;
-  font-size: 14px;
+  border: 2px solid #e3d2d2;
+  padding: 6px;
+  border-radius: 10px;
+  font-size: 13px;
   font-weight: 500;
+  background: white;
+  transition: all 0.25s ease;
+}
+
+.material-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(109,47,47,0.2);
+  border-color: #c9a875;
 }
 
 .material-card img {
   width: 100%;
   height: 70px;
   object-fit: cover;
-  border-radius: 5px;
+  border-radius: 6px;
 }
 
 .material-card.active {
-  border: 2px solid #8b5d5d;
+  border: 2px solid #6d2f2f;
+  box-shadow: 0 0 0 3px rgba(201,168,117,0.35), 0 8px 18px rgba(109,47,47,0.25);
+  transform: translateY(-4px);
 }
 .color-options {
   display: flex;
@@ -465,29 +605,33 @@ const finalPrice = computed(() => {
 
 .color-box {
   padding: 6px 10px;
-  border: 3px solid #ccc;
+  border: 2px solid #d8c3c3;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 6px;
   font-size: 14px;
   font-weight: 600;
+  transition: all 0.2s ease;
 }
 
 .color-box.active {
-  background: #8b5d5d;
+  background: #6d2f2f;
   color: white;
+  border-color: #6d2f2f;
 }
 .related {
   margin: 20px 0;
 }
 
 .related h2 {
+  font-family: 'Playfair Display', serif;
+  color: #4a1f1f;
   margin-bottom: 20px;
 }
 
 .related-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  gap: 12px;
 }
 
 .related-card {
@@ -496,6 +640,13 @@ const finalPrice = computed(() => {
   cursor: pointer;
   overflow: hidden;
   border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.related-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(109,47,47,0.2);
 }
 
 .related-card img {
@@ -504,7 +655,7 @@ const finalPrice = computed(() => {
 }
 
 .bead-card .overlay {
-  width:50%;
+  width: 50%;
   position: absolute;
   inset: 0;
   background: #6d2f2f;
@@ -528,18 +679,20 @@ const finalPrice = computed(() => {
 }
 
 .action-buttons button {
-  padding: 8px 16px;
+  padding: 8px 18px;
   border-radius: 20px;
-  border: 1px solid #6d2f2f;
+  border: 1.5px solid #6d2f2f;
   background: white;
   color: #6d2f2f;
   cursor: pointer;
+  font-weight: 500;
   transition: 0.2s;
 }
 
 .action-buttons button.active {
   background: #6d2f2f;
   color: white;
+  box-shadow: 0 4px 10px rgba(109,47,47,0.3);
 }
 .bead-card {
   height: 90px;
@@ -548,6 +701,7 @@ const finalPrice = computed(() => {
   position: relative;
   cursor: pointer;
   transition: 0.3s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
 .bead-card img {
   width: 100%;
@@ -558,7 +712,7 @@ const finalPrice = computed(() => {
 .bead-card .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(80,30,30,0.7);
+  background: rgba(80,30,30,0.72);
   color: white;
   display: flex;
   flex-direction: column;
@@ -568,12 +722,13 @@ const finalPrice = computed(() => {
 }
 
 .bead-card:hover {
-  transform: scale(1.03)
+  transform: scale(1.04);
+  box-shadow: 0 10px 22px rgba(109,47,47,0.3);
 }
 
 .bead-card.active {
- outline: 2px solid #6d2f2f;
- transform: scale(1.03);
+ outline: 3px solid #c9a875;
+ transform: scale(1.04);
 }
 .bead-card-grid {
   display: grid;
@@ -590,27 +745,31 @@ const finalPrice = computed(() => {
   margin-top: 8px;
   padding: 8px 12px;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1.5px solid #d8c3c3;
   width: 200px;
   font-size: 14px;
   cursor: pointer;
+  background: white;
 }
 
 .color-select:focus {
   outline: none;
   border-color: #6d2f2f;
+  box-shadow: 0 0 0 3px rgba(109,47,47,0.15);
 }
 .dropdown {
   position: relative;
 }
 
 .dropdown-btn {
-  padding: 8px 16px;
+  padding: 8px 18px;
   border-radius: 20px;
-  border: 1px solid #6d2f2f;
-  background: #6d2f2f;
+  border: none;
+  background: linear-gradient(135deg, #6d2f2f, #8b3d3d);
   color: white;
   cursor: pointer;
+  font-weight: 500;
+  box-shadow: 0 4px 10px rgba(109,47,47,0.3);
 }
 
 .dropdown-menu {
@@ -618,19 +777,23 @@ const finalPrice = computed(() => {
   top: 110%;
   left: 0;
   background: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  border: 1px solid #eee;
+  border-radius: 10px;
   width: 180px;
   z-index: 10;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  overflow: hidden;
 }
 
 .dropdown-item {
-  padding: 8px;
+  padding: 10px 12px;
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 .dropdown-item:hover {
-  background: #f3f3f3;
+  background: #f3eded;
+  color: #6d2f2f;
 }
 .selected-options{
   margin: 20px 0;
@@ -639,5 +802,6 @@ const finalPrice = computed(() => {
 .selected-options p{
   margin-bottom: 8px;
   font-size: 15px;
+  color: #4a1f1f;
 }
 </style>

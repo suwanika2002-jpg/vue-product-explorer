@@ -293,7 +293,8 @@ const goToDetails = (id) => {
 </template>
 
 <style scoped>
-/* PAGE */
+
+
 
 /* PAGE */
 .product-page {
@@ -332,8 +333,6 @@ const goToDetails = (id) => {
   padding: 50px 35px;
 
   background: rgba(255, 255, 255, 0.4);
- 
-
 }
 
 /* HEADING */
@@ -508,6 +507,17 @@ const goToDetails = (id) => {
   padding: 0 30px;
   font-size: 14px;
   outline: none;
+}
+/* Dark Mode Search Box */
+.dark-mode .search-input {
+  background: #3b3b3b;     /* Dark grey */
+  color: #ffffff;          /* White text */
+  border: 1px solid #555;
+}
+
+/* Placeholder text */
+.dark-mode .search-input::placeholder {
+  color: #cfcfcf;
 }
 
 .search-btn {

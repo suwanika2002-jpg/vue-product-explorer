@@ -2,38 +2,37 @@
   <nav class="navbar">
     <div class = "top-bar">
 
-  <!-- MENU BUTTON -->
   <button class="menu-btn" @click="showMenu = !showMenu">
-    ☰
-  </button>
+  ☰
+</button>
+<div
+  v-if="showMenu"
+  class="overlay"
+  @click="showMenu = false"
+></div>
+<!-- SIDEBAR -->
+<div
+  class="sidebar"
+  :class="{ active: showMenu }"
+>
 
-  <!-- SIDEBAR -->
-  <div v-if="showMenu" class="sidebar">
-
-    <div class="sidebar-title">
-      Options
-    </div>
-
-    <ul>
-
-      <li @click="goToProducts">
-        Categories
-      </li>
-
-      <li @click="goToCart">
-        Cart
-      </li>
-
-      <li>Contact Us</li>
-
-      <li @click="logout">
-        Log Out
-      </li>
-
-    </ul>
-
+  <div class="sidebar-title">
+    Options
   </div>
 
+  <ul>
+    <li @click="goToProducts">Categories</li>
+    <li @click="goToCart">Cart</li>
+    <li>Contact Us</li>
+    <li @click="logout">Log Out</li>
+  </ul>
+
+  <div
+  v-if="showMenu"
+  class="overlay"
+  @click="showMenu = false"
+></div>
+</div>
 
     <h2 class="logo">MyStyle</h2>
     </div>
@@ -136,18 +135,31 @@ const logout = () => {
 }
 
 .sidebar{
-  position: absolute;
-  top: 40px;
+  position: fixed;
+  top: 80px;
   left: 0;
 
-  width: 200px;
+  width: 220px;
+  height: calc(100vh - 80px);
+
   background: white;
+  box-shadow: 4px 0 12px rgba(0,0,0,0.2);
 
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transform: translateX(-100%);
+  transition: transform 0.35s ease-in-out;
 
-  z-index: 999;
+  z-index: 1001;
 }
 
+.sidebar.active{
+  transform: translateX(0);
+}
+.overlay{
+  position: fixed;
+  inset: 0;
+  background: transparent; /* Change to rgba(0,0,0,.3) if you want a dark background */
+  z-index: 1000;
+}
 .sidebar-title{
   background: rgb(53, 3, 3);
   color: white;
@@ -165,15 +177,16 @@ const logout = () => {
 }
 
 .sidebar li{
-  padding: 15px;
+  padding: 16px 20px;
   border-bottom: 1px solid #ddd;
-
   font-size: 18px;
   cursor: pointer;
+  transition: all 0.25s ease;
 }
 
 .sidebar li:hover{
   background: #f5f5f5;
+  padding-left: 28px;
 }
 /* LOGO */
 .logo {

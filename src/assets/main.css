@@ -225,19 +225,13 @@ body {
   background: #2a2a2a;
 }
 
-.dark-mode .product-card {
-  background: #2d2d2d;
-  color: white;
-}
-
-.dark-mode .search-input {
-  background: #333;
-  color: white;
-}
 /* =========================
    DARK MODE
 ========================= */
-
+/* Product List Dark Mode */
+.dark-mode .products-container{
+    background:#3b3b3b !important;
+}
 .dark-mode .customer-details,
 .dark-mode .payment-section,
 .dark-mode .delivery-box {
@@ -252,11 +246,65 @@ body {
   border: 1px solid #555;
 }
 
-.dark-mode label,
-.dark-mode h1,
-.dark-mode h2,
-.dark-mode h3,
-.dark-mode p {
+.dark-mode .checkout-page label,
+.dark-mode .checkout-page h1,
+.dark-mode .checkout-page h2,
+.dark-mode .checkout-page h3,
+.dark-mode .checkout-page p {
+  color: rgb(230,188,188);
+}
+/* =========================
+   CART PAGE - DARK MODE
+========================= */
+
+.dark-mode .cart-page {
+  background: #1a1a1a;
+}
+
+.dark-mode .cart-card,
+.dark-mode .summary-box {
+  background: #3b3b3b;
+}
+
+.dark-mode .selection-bar {
+  background: #5b001e;
+  color: white;
+}
+
+.dark-mode .cart-heading,
+.dark-mode .summary-box h2,
+.dark-mode .top-row h3,
+.dark-mode .price,
+.dark-mode .total-row,
+.dark-mode .summary-product span:last-child {
   color: rgb(230, 188, 188);
-  
+}
+
+.dark-mode .description,
+.dark-mode .summary-row,
+.dark-mode .summary-product,
+.dark-mode .promo {
+  color: #d0d0d0;
+}
+
+.dark-mode .option-tag {
+  background: #4a4a4a;
+  color: white;
+}
+
+.dark-mode .quantity-box button {
+  background: #555;
+  color: white;
+}
+
+.dark-mode .quantity-box button:hover {
+  background: #666;
+}
+
+.dark-mode .quantity-box span {
+  color: white;
+}
+
+.dark-mode .summary-box hr {
+  border-top: 1px solid #555;
 }
