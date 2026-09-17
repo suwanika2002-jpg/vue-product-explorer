@@ -308,3 +308,19 @@ body {
 .dark-mode .summary-box hr {
   border-top: 1px solid #555;
 }
+/* Responsive global styles */
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+button {
+  min-height: 45px;
+  font-size: 16px;
+}
+
+input {
+  width: 100%;
+  font-size: 16px;
+}

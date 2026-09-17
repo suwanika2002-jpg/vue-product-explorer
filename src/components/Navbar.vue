@@ -1,61 +1,67 @@
 <template>
   <nav class="navbar">
-    <div class = "top-bar">
 
-  <button class="menu-btn" @click="showMenu = !showMenu">
-  ☰
-</button>
-<div
-  v-if="showMenu"
-  class="overlay"
-  @click="showMenu = false"
-></div>
-<!-- SIDEBAR -->
-<div
-  class="sidebar"
-  :class="{ active: showMenu }"
->
+    <div class="top-bar">
 
-  <div class="sidebar-title">
-    Options
-  </div>
+      <!-- MENU BUTTON -->
+      <button class="menu-btn" @click="showMenu = !showMenu">
+        ☰
+      </button>
 
-  <ul>
-    <li @click="goToProducts">Categories</li>
-    <li @click="goToCart">Cart</li>
-    <li>Contact Us</li>
-    <li @click="logout">Log Out</li>
-  </ul>
+      <!-- OVERLAY -->
+      <div
+        v-if="showMenu"
+        class="overlay"
+        @click="showMenu = false"
+      ></div>
 
-  <div
-  v-if="showMenu"
-  class="overlay"
-  @click="showMenu = false"
-></div>
-</div>
+      <!-- SIDEBAR -->
+      <div
+        class="sidebar"
+        :class="{ active: showMenu }"
+      >
+        <div class="sidebar-title">
+          Options
+        </div>
 
-    <h2 class="logo">MyStyle</h2>
+        <ul>
+          <li @click="goToProducts">Categories</li>
+          <li @click="goToCart">Cart</li>
+          <li @click="goToContact">Contact Us</li>
+          <li @click="logout">Log Out</li>
+        </ul>
+      </div>
+
+      <!-- LOGO -->
+      <h2 class="logo">MyStyle</h2>
+
     </div>
+
     <div class="nav-right">
-      <span class="nav-link" @click="$emit('openLogin')">Home</span>
+    
+<span class="nav-link" @click="router.push('/')">
+    Home
+  </span>
       <span class="nav-link">Contact Us</span>
       <span class="nav-link">About Us</span>
-      <span class="nav-link" @click="$emit('openLogin')">Login</span>
+       <span class="nav-link" @click="handleLoginLogout">
+  {{ isLoggedIn ? 'Log Out' : 'Login' }}
+</span>
 
-      <span class="cart-icon" @click="goCart">🛒</span>
-  
- <label class="toggle-switch">
-  <input
-    type="checkbox"
-    :checked="isDarkMode"
-    @change="toggleDarkMode"
-  >
-  <span class="toggle-slider"></span>
-</label>
+      <span class="cart-icon" @click="goToCart">🛒</span>
+
+      <label class="toggle-switch">
+        <input
+          type="checkbox"
+          :checked="isDarkMode"
+          @change="toggleDarkMode"
+        >
+        <span class="toggle-slider"></span>
+      </label>
     </div>
+
   </nav>
 </template>
-
 <script setup>
 import { ref, onMounted } from 'vue'
 
@@ -79,15 +85,31 @@ const toggleDarkMode = () => {
   localStorage.setItem('darkMode', isDarkMode.value)
 }
 
-onMounted(() => {
-  const savedMode = localStorage.getItem('darkMode')
+const isLoggedIn = ref(false)
 
+ onMounted(() => {
+  // Dark mode
+  const savedMode = localStorage.getItem('darkMode')
   if (savedMode === 'true') {
     isDarkMode.value = true
     document.body.classList.add('dark-mode')
   }
+
+  // Login status
+  isLoggedIn.value = localStorage.getItem('isLoggedIn') === 'true'
 })
-const goCart = () => {
+const emit = defineEmits(['openLogin'])
+const handleLoginLogout = () => {
+  if (isLoggedIn.value) {
+    localStorage.removeItem('isLoggedIn')
+    isLoggedIn.value = false
+
+    router.push('/')
+  } else {
+    emit('openLogin')
+  }
+}
+const goToCart = () => {
   showMenu.value = false
   router.push('/cart')
 }
@@ -100,8 +122,11 @@ const goToProducts = () => {
 
 const logout = () => {
   showMenu.value = false
+
+  localStorage.removeItem('isLoggedIn')
+  isLoggedIn.value = false
+
   router.push('/')
-  // Add logout logic here
 }
 </script>
 
@@ -126,12 +151,21 @@ const logout = () => {
   padding: 15px 20px;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap');
+
 .menu-btn{
+  display: block;
   border: none;
   background: transparent;
   font-size: 25px;
   cursor: pointer;
   margin-right: 10px;
+  color: #4a1f1f;
+  transition: transform 0.2s ease;
+}
+
+.menu-btn:hover{
+  transform: scale(1.1);
 }
 
 .sidebar{
@@ -139,16 +173,18 @@ const logout = () => {
   top: 80px;
   left: 0;
 
-  width: 220px;
+  width: 230px;
   height: calc(100vh - 80px);
 
   background: white;
-  box-shadow: 4px 0 12px rgba(0,0,0,0.2);
+  box-shadow: 6px 0 24px rgba(0,0,0,0.2);
+  font-family: 'Poppins', sans-serif;
 
   transform: translateX(-100%);
   transition: transform 0.35s ease-in-out;
 
   z-index: 1001;
+  overflow: hidden;
 }
 
 .sidebar.active{
@@ -157,17 +193,32 @@ const logout = () => {
 .overlay{
   position: fixed;
   inset: 0;
-  background: transparent; /* Change to rgba(0,0,0,.3) if you want a dark background */
+  background: rgba(0,0,0,0.25);
   z-index: 1000;
 }
 .sidebar-title{
-  background: rgb(53, 3, 3);
+  background: linear-gradient(135deg, #4a1414 0%, #6d2f2f 100%);
   color: white;
 
   text-align: center;
-  padding: 10px;
-  font-size: 18px;
-  font-weight: bold;
+  padding: 16px 10px;
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  position: relative;
+}
+
+.sidebar-title::after{
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 3px;
+  background: #c9a875;
+  border-radius: 2px;
 }
 
 .sidebar ul{
@@ -178,16 +229,47 @@ const logout = () => {
 
 .sidebar li{
   padding: 16px 20px;
-  border-bottom: 1px solid #ddd;
-  font-size: 18px;
+  border-bottom: 1px solid #f0e6e6;
+  font-size: 16px;
+  font-weight: 500;
+  color: #3a2a2a;
   cursor: pointer;
   transition: all 0.25s ease;
+  position: relative;
+}
+
+.sidebar li::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: #c9a875;
+  transform: scaleY(0);
+  transition: transform 0.25s ease;
 }
 
 .sidebar li:hover{
-  background: #f5f5f5;
+  background: #faf3f0;
   padding-left: 28px;
+  color: #6d2f2f;
 }
+
+.sidebar li:hover::before{
+  transform: scaleY(1);
+}
+
+.sidebar li:last-child{
+  border-bottom: none;
+  color: #a33;
+}
+
+.sidebar li:last-child:hover{
+  background: #fdf0f0;
+  color: #c0392b;
+}
+
 /* LOGO */
 .logo {
   font-family: 'Sail', cursive;
@@ -269,5 +351,6 @@ const logout = () => {
 .toggle-switch input:checked + .toggle-slider::before {
   transform: translateX(20px);
 }
+
 
 </style>

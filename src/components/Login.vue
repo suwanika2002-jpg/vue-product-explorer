@@ -1,19 +1,33 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 const username = ref('')
 const password = ref('')
 const errormessage = ref('')
+
 const router = useRouter()
 const emit = defineEmits(['close'])
-// demo login
+
+// Demo login
 const correctUsername = 'user123'
 const correctPassword = 'pass123'
 
+// Clear error while typing
+watch([username, password], () => {
+  errormessage.value = ''
+})
 
 const goToProducts = () => {
-  if (username.value === correctUsername && password.value === correctPassword) {
+  if (
+    username.value === correctUsername &&
+    password.value === correctPassword
+  ) {
+    // Save login status
+    localStorage.setItem('isLoggedIn', 'true')
+
+    errormessage.value = ''
+
     emit('close')
     router.push('/products')
   } else {
@@ -205,5 +219,28 @@ const goToProducts = () => {
   margin-top: -8px;
   margin-bottom: 10px;
   text-align: center;
+}
+@media(max-width:768px){
+
+.login-content{
+
+flex-direction:column;
+
+}
+
+.login-image{
+
+display:none;
+
+}
+
+.login-card{
+
+width:100%;
+
+padding:25px;
+
+}
+
 }
 </style>

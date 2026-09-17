@@ -439,5 +439,27 @@ const total = computed(() => {
   margin-top: 20px;
   color: #777;
 }
+.cart-container{
 
+display:flex;
+justify-content:space-between;
+
+}
+
+@media(max-width:768px){
+
+.cart-container{
+
+flex-direction:column;
+
+}
+
+.cart-items,
+.summary{
+
+width:100%;
+
+}
+
+}
 </style>

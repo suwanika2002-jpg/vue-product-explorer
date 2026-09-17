@@ -346,7 +346,34 @@ const finalPrice = computed(() => {
 <style scoped>
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap');
+.product-details{
 
+display:flex;
+gap:40px;
+
+}
+
+@media(max-width:768px){
+
+.product-details{
+
+flex-direction:column;
+
+}
+
+.product-image{
+
+width:100%;
+
+}
+
+.product-info{
+
+width:100%;
+
+}
+
+}
 .dark-mode .page {
   padding: 60px;
   background: #141010;

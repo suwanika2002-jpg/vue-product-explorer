@@ -624,4 +624,39 @@ const goToDetails = (id) => {
 display:inline-block;
   box-shadow: 0 2px 6px rgba(0,0,0,0.5);
 }
+.products-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:25px;
+}
+
+/* Tablet */
+
+@media (max-width:992px){
+
+.products-grid{
+    grid-template-columns:repeat(3,1fr);
+}
+
+}
+
+/* Mobile */
+
+@media (max-width:768px){
+
+.products-grid{
+    grid-template-columns:repeat(2,1fr);
+}
+
+}
+
+/* Small phones */
+
+@media (max-width:480px){
+
+.products-grid{
+    grid-template-columns:1fr;
+}
+
+}
 </style>

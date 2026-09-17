@@ -15,3 +15,31 @@ defineProps({
     </button>
   </div>
 </template>
+@media (max-width:768px){
+
+.product-card{
+
+width:100%;
+padding:12px;
+
+}
+
+.product-card img{
+
+height:180px;
+
+}
+
+.product-title{
+
+font-size:16px;
+
+}
+
+.price{
+
+font-size:18px;
+
+}
+
+}

@@ -1,20 +1,21 @@
 <script setup>
 import { ref } from 'vue'
-import Login from './pages/Login.vue' // ✅ import
+import Login from './components/Login.vue'
 import Navbar from './components/Navbar.vue'
 
 const showLogin = ref(false)
 </script>
 
 <template>
-  
-      <Navbar @openLogin="showLogin = true" />
+  <Navbar @openLogin="showLogin = true" />
 
-      <router-view @openLogin="showLogin = true" />
+  <router-view @openLogin="showLogin = true" />
 
-      <Login v-if ="showLogin" @close="showLogin = false" />
- 
- 
+  <Login
+    v-if="showLogin"
+    @close="showLogin = false"
+  />
+
   <footer class="footer">
 
 
@@ -40,8 +41,3 @@ const showLogin = ref(false)
 
 </template>
 
-<style>
-body {
-  margin: 0;
-}
-</style>

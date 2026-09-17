@@ -5,12 +5,18 @@ const fullName = ref('Suwanika')
 const phone = ref('0705174872')
 const address = ref('123, Main Street, Kegalle')
 
-const cardName = ref('Suwanika')
 const payment = ref('card')
+
+const cardName = ref('Suwanika')
 const cardNumber = ref('4111-1100-1122-3311')
 const expireDate = ref('12/30')
 const cvv = ref('123')
 
+const showSuccess = ref(false)
+const showFailed = ref(false)
+const showOrderSuccess = ref(false)
+
+// Format Card Number
 const formatCardNumber = () => {
   cardNumber.value = cardNumber.value
     .replace(/\D/g, '')
@@ -22,6 +28,7 @@ const formatCardNumber = () => {
   }
 }
 
+// Format Expiry Date
 const formatExpireDate = () => {
   expireDate.value = expireDate.value
     .replace(/\D/g, '')
@@ -29,36 +36,36 @@ const formatExpireDate = () => {
     .slice(0, 5)
 }
 
+// Format CVV
 const formatCVV = () => {
   cvv.value = cvv.value
     .replace(/\D/g, '')
     .slice(0, 3)
 }
 
-const showSuccess = ref(false)
-const showFailed = ref(false)
-const showOrderSuccess = ref(false)
-
+// Payment Handler
 const handlePayment = () => {
 
-  // Validate Customer Details (required for both payment methods)
+  // Hide previous popups
+  showSuccess.value = false
+  showFailed.value = false
+  showOrderSuccess.value = false
+
+  // Validate Customer Details
   if (
     !fullName.value.trim() ||
     !phone.value.trim() ||
     !address.value.trim()
   ) {
-    showSuccess.value = false
     showFailed.value = true
     return
   }
 
-// Cash on Delivery
-if (payment.value === 'cash') {
-  showOrderSuccess.value = true
-  showSuccess.value = false
-  showFailed.value = false
-  return
-}
+  // Cash on Delivery
+  if (payment.value === 'cash') {
+    showOrderSuccess.value = true
+    return
+  }
 
   // Validate Card Details
   if (
@@ -67,7 +74,6 @@ if (payment.value === 'cash') {
     !expireDate.value.trim() ||
     !cvv.value.trim()
   ) {
-    showSuccess.value = false
     showFailed.value = true
     return
   }
@@ -80,14 +86,12 @@ if (payment.value === 'cash') {
     cvv.value === '123'
   ) {
     showSuccess.value = true
-    showFailed.value = false
   } else {
-    showSuccess.value = false
     showFailed.value = true
   }
 }
-
 </script>
+
 
 <template>
   <div class="checkout-page">
@@ -153,32 +157,31 @@ if (payment.value === 'cash') {
     </div>
 
     <!-- PAYMENT METHOD -->
-    <h2 class="section-title">Payment Method</h2>
+<h2 class="section-title">Payment Method</h2>
 
-    <div class="option-row">
+<div class="option-row">
+  <label class="option-card">
+    <input
+      type="radio"
+      name="payment"
+      value="card"
+      v-model="payment"
+    />
+    <span>Credit / Debit Card</span>
+  </label>
 
-      <label class="option-card">
-        <input
-          type="radio"
-          name="payment"
-          value="card"
-          v-model="payment"
-        />
-        <span>Credit / Debit Card</span>
-      </label>
-   <label class="option-card">
-        <input
-          type="radio"
-          name="payment"
-          value="cash"
-          v-model="payment"
-        />
-        <span>Cash on Delivery</span>
-      </label>
+  <label class="option-card">
+    <input
+      type="radio"
+      name="payment"
+      value="cash"
+      v-model="payment"
+    />
+    <span>Cash on Delivery</span>
+  </label>
+</div>
 
-    </div>
-
-  <!-- CASH ON DELIVERY -->
+<!-- CASH ON DELIVERY -->
 <div
   v-if="payment === 'cash'"
   class="cash-message"
@@ -196,33 +199,6 @@ if (payment.value === 'cash') {
   >
     Confirm Order
   </button>
-</div>
-
-<!-- ORDER SUCCESS POPUP -->
-<div
-  v-if="showOrderSuccess"
-  class="popup-overlay"
->
-  <div class="success-popup">
-
-    <div class="success-circle">
-      ✓
-    </div>
-
-    <h1>Order Successfully Placed!</h1>
-
-    <p class="order-message">
-      We've received your order successfully.
-    </p>
-
-    <button
-      class="continue-btn"
-      @click="showOrderSuccess = false"
-    >
-      Continue Shopping
-    </button>
-
-  </div>
 </div>
 
 <!-- CARD PAYMENT -->
@@ -278,6 +254,88 @@ if (payment.value === 'cash') {
     Pay Now
   </button>
 </div>
+
+<!-- PAYMENT SUCCESS POPUP -->
+<div
+  v-if="showSuccess"
+  class="popup-overlay"
+>
+  <div class="success-popup">
+
+    <div class="success-circle">
+      ✓
+    </div>
+
+    <h1>Payment Successful!</h1>
+
+    <p class="order-message">
+      Your payment has been completed successfully.
+    </p>
+
+    <button
+      class="continue-btn"
+      @click="showSuccess = false"
+    >
+      Continue Shopping
+    </button>
+
+  </div>
+</div>
+
+<!-- ORDER SUCCESS POPUP -->
+<div
+  v-if="showOrderSuccess"
+  class="popup-overlay"
+>
+  <div class="success-popup">
+
+    <div class="success-circle">
+      ✓
+    </div>
+
+    <h1>Order Successfully Placed!</h1>
+
+    <p class="order-message">
+      We've received your order successfully.
+    </p>
+
+    <button
+      class="continue-btn"
+      @click="showOrderSuccess = false"
+    >
+      Continue Shopping
+    </button>
+
+  </div>
+</div>
+
+<!-- PAYMENT FAILED -->
+<div
+  v-if="showFailed"
+  class="popup-overlay"
+>
+  <div class="failed-popup">
+
+    <div class="failed-circle">
+      ✕
+    </div>
+
+    <h1>Payment Failed</h1>
+
+    <p>
+      Unfortunately, there was an issue with your payment.
+    </p>
+
+    <button
+      class="try-btn"
+      @click="showFailed = false"
+    >
+      Try Again
+    </button>
+
+  </div>
+</div>
+
 </div>
 </template>
 
@@ -328,12 +386,32 @@ if (payment.value === 'cash') {
 
 .option-card{
   width: 300px;
+  height: 90px;
+
   background: #ece6d6;
-  padding: 20px;
+
   display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 10px;
-  font-weight: bold;
+  gap: 14px;
+
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 18px;
+
+  border-radius: 6px;
+  transition: 0.3s;
+}
+.option-card input[type="radio"]{
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+}
+
+.option-card span{
+  color: #000;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .section-title{
@@ -629,11 +707,15 @@ border-radius: 20px 20px 0px 0px;
   line-height: 1.6;
 }
 /* Keep Delivery and Pick Up text black in dark mode */
-.dark-mode .option-card,
-.dark-mode .option-card span,
-.dark-mode .option-card label {
+.dark-mode .option-card{
+  background: #ece6d6;
+}
+
+.dark-mode .option-card span{
   color: #000 !important;
 }
+
+
 .success-popup h1{
     font-size: 25px;
     margin-bottom: 5px;
@@ -648,4 +730,5 @@ border-radius: 20px 20px 0px 0px;
 .continue-btn{
     font-size: 15px;
 }
+
 </style>
